@@ -1,0 +1,77 @@
+name:                stack-hpc-coveralls
+version:             0.0.0.1
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            http://github.com/rubik/stack-hpc-coveralls
+license:             ISC
+license-file:        LICENSE
+author:              Michele Lacchia
+maintainer:          michelelacchia@gmail.com
+copyright:           Copyright (c) 2015 Michele Lacchia
+category:            Control
+build-type:          Simple
+extra-source-files:
+    stack.yaml
+cabal-version:       >=1.18
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     SHC
+  other-modules:       SHC.Coveralls
+                       SHC.Types
+                       SHC.Paths
+                       SHC.Utils
+                       SHC.Lix
+                       SHC.Api
+  build-depends:       base           >=4.7  && <5
+                     , hpc            >=0.6
+                     , filepath       >=1.4
+                     , process        >=1.2
+                     , pureMD5        >=2.1
+                     , containers     >=0.5
+                     , aeson          >=0.8
+                     , bytestring     >=0.10
+                     , utf8-string    >=1.0
+                     , text           >=1.2
+                     , directory      >=1.2
+                     , directory-tree >=0.12
+                     , wreq           >=0.4
+                     , http-client    >=0.4
+                     , lens           >=4.12
+                     , lens-aeson     >=1.0
+                     , safe           >=0.3
+  default-language:    Haskell2010
+
+executable stack-hpc-coveralls
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -Wall
+  build-depends:       base       >=4.7 && <5
+                     , aeson      >=0.8
+                     , bytestring >=0.10
+                     , docopt     >=0.7
+                     , stack-hpc-coveralls -any
+  default-language:    Haskell2010
+
+test-suite stack-hpc-coveralls-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base                >=4.7 && <5
+                     , stack-hpc-coveralls -any
+                     , hspec               >=2.1
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+test-suite style
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             HLint.hs
+  build-depends:       base  >=4.7 && <5
+                     , hlint ==1.*
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+
+source-repository head
+  type:     git
+  location: https://github.com/rubik/stack-hpc-coveralls

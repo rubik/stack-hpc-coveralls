@@ -1,0 +1,10 @@
+Usage:
+    stack-hpc-coveralls [options] <package-name> <suite-name>
+
+Options:
+    -h --help           show this help
+    --hpc-dir=<path>    base HPC directory
+    --mix-dir=<path>    directory in which HPC stores mix files
+    --repo-token        Coveralls repo token
+    --partial-coverage  allow partial line coverage
+    --dont-send         display Coveralls JSON instead of sending it
