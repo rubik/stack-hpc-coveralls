@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- |
@@ -20,11 +21,11 @@ import           Data.Digest.Pure.MD5
 import           Data.Function
 import           Data.List
 import qualified Data.Map.Strict as M
+import           System.FilePath ((</>))
 import           System.Exit (exitFailure)
 import           SHC.Types
 import           SHC.Utils
 import           SHC.Lix
-import           SHC.Paths
 import           Trace.Hpc.Mix
 import           Trace.Hpc.Tix
 import           Trace.Hpc.Util
@@ -44,7 +45,7 @@ type SimpleCoverage = [CoverageValue]
 type LixConverter = Lix -> SimpleCoverage
 
 strictConverter :: LixConverter
-strictConverter = map $ \lix -> case lix of
+strictConverter = map $ \case
     Full       -> Number 1
     Partial    -> Number 0
     None       -> Number 0
@@ -106,7 +107,7 @@ readMix' conf tix = readMix [SHC.Types.mixDir conf] (Right tix)
 -- | Create a list of coverage data from the tix input
 readCoverageData :: Config -> String -> IO TestSuiteCoverageData
 readCoverageData conf suite = do
-    let tixPath = getTixPath (hpcDir conf) suite
+    let tixPath = hpcDir conf </> "tix" </> suite </> getTixFileName suite
     mTix <- readTix tixPath
     case mTix of
         Nothing -> putStrLn ("Couldn't find the file " ++ tixPath) >>

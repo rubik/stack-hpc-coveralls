@@ -19,7 +19,6 @@ library
   exposed-modules:     SHC
   other-modules:       SHC.Coveralls
                        SHC.Types
-                       SHC.Paths
                        SHC.Utils
                        SHC.Lix
                        SHC.Api

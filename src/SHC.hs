@@ -1,5 +1,5 @@
-module SHC (
-    Config(..)
+module SHC
+  ( Config(..)
   , ConversionType(..)
   , PostResult(..)
   , generateCoverallsFromTix
@@ -8,8 +8,7 @@ module SHC (
   , getHpcDir
   , getMixDir
   , getGitInfo
-  )
-    where
+  ) where
 
 
 import SHC.Types
