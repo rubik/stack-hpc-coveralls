@@ -9,6 +9,7 @@ import qualified Data.Text as T
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as LBS
 import Codec.Binary.UTF8.String (decode)
+import Control.Applicative ((<$>))
 import Control.Lens
 import Network.Wreq
 import Network.HTTP.Client (RequestBody(RequestBodyLBS))

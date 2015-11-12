@@ -52,7 +52,7 @@ strictConverter = map $ \case
     Irrelevant -> Null
 
 looseConverter :: LixConverter
-looseConverter = map $ \lix -> case lix of
+looseConverter = map $ \case
     Full       -> Number 2
     Partial    -> Number 1
     None       -> Number 0
@@ -107,7 +107,7 @@ readMix' conf tix = readMix [SHC.Types.mixDir conf] (Right tix)
 -- | Create a list of coverage data from the tix input
 readCoverageData :: Config -> String -> IO TestSuiteCoverageData
 readCoverageData conf suite = do
-    let tixPath = hpcDir conf </> "tix" </> suite </> getTixFileName suite
+    let tixPath = hpcDir conf </> suite </> getTixFileName suite
     mTix <- readTix tixPath
     case mTix of
         Nothing -> putStrLn ("Couldn't find the file " ++ tixPath) >>

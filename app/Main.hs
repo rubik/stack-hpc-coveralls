@@ -6,6 +6,7 @@ import Data.List (find)
 import Data.Maybe (isJust)
 import Data.Aeson (encode)
 import qualified Data.ByteString.Lazy as BSL
+import Control.Applicative (pure, (<$>), (<*>))
 import Control.Concurrent (threadDelay)
 import System.Console.Docopt
 import System.Environment (getArgs, getEnv, getEnvironment)
