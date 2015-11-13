@@ -86,7 +86,7 @@ readCoverageData conf suite = do
             let files = map filePath mixs
             sources <- mapM readFile files
             let coverageData = zip4 files sources mixs (map tixModuleTixs tixs)
-            let filteredCoverageData = filter sourceDirFilter coverageDataList
+            let filteredCoverageData = filter sourceDirFilter coverageData
             return $ M.fromList $ map toFirstAndRest filteredCoverageData
             where filePath (Mix fp _ _ _ _) = fp
                   sourceDirFilter = not . matchAny excludeDirPatterns . fst4

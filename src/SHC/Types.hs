@@ -11,9 +11,9 @@ data ConversionType = FullLines
                     | PartialLines
                     deriving (Show, Eq)
 
-type CoverageEntry = ( [MixEntry]  -- ^ Mix entries
-                     , [Integer]   -- ^ Tix values
-                     , [String]    -- ^ Entry source code
+type CoverageEntry = ( [MixEntry]  -- Mix entries
+                     , [Integer]   -- Tix values
+                     , [String]    -- Entry source code
                      )
 
 data Hit = Full
