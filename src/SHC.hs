@@ -8,10 +8,11 @@ module SHC
   , getHpcDir
   , getMixDir
   , getGitInfo
+  , checkStackVersion
   ) where
 
 
 import SHC.Types
 import SHC.Api
 import SHC.Utils
-import SHC.Coveralls
+import SHC.Coverage

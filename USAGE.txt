@@ -1,5 +1,5 @@
 Usage:
-    stack-hpc-coveralls [options] <package-name> <suite-name>
+    shc [options] <package-name> <suite-name>
 
 Options:
     -h --help           show this help

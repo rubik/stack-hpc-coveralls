@@ -6,6 +6,7 @@ import Data.List (find)
 import Data.Maybe (isJust)
 import Data.Aeson (encode)
 import qualified Data.ByteString.Lazy as BSL
+import Control.Monad (unless)
 import Control.Applicative (pure, (<$>), (<*>))
 import Control.Concurrent (threadDelay)
 import System.Console.Docopt
@@ -44,7 +45,6 @@ defaultOr args opt action = maybe action return $ args `getArg` opt
 
 getConfig :: Arguments -> IO Config
 getConfig args = do
-    -- TODO: Read from Cabal?
     pn <- args `getArgOrExit` argument "package-name"
     (sn, jId) <- getServiceAndJobId
     Config <$> args `getArgOrExit` argument "suite-name"
@@ -61,6 +61,10 @@ getConfig args = do
 main :: IO ()
 main = do
     args <- parseArgsOrExit patterns =<< getArgs
+    stackGood <- checkStackVersion
+    unless stackGood $ do
+        putStrLn "Error: at least Stack 0.1.7 is required"
+        exitFailure
     conf <- getConfig args
     coverallsJson <- generateCoverallsFromTix conf
     if args `isPresent` longOption "dont-send"
@@ -69,13 +73,14 @@ main = do
          response <- sendData conf urlApiV1 coverallsJson
          case response of
              PostSuccess url -> do
-                 putStrLn $ "URL: " ++ url
+                 let apiUrl = url ++ ".json"
+                 putStrLn $ "Job URL: " ++ apiUrl
                  -- wait 5 seconds until the page is available
                  threadDelay $ 5 * 1000 * 1000
-                 coverageResult <- readCoverageResult url
+                 coverageResult <- readCoverageResult apiUrl
                  case coverageResult of
-                     Just totalCov -> putStrLn $ "Coverage: " ++ totalCov
-                     Nothing -> putStrLn "Failed to read total coverage"
+                     Just totalCov -> putStrLn $ "Coverage: " ++ show totalCov
+                     Nothing       -> putStrLn "Failed to read total coverage"
              PostFailure msg -> do
                  putStrLn $ "Error: " ++ msg
                  exitFailure

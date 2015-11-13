@@ -18,7 +18,7 @@ cabal-version:       >=1.18
 library
   hs-source-dirs:      src
   exposed-modules:     SHC
-  other-modules:       SHC.Coveralls
+  other-modules:       SHC.Coverage
                        SHC.Types
                        SHC.Utils
                        SHC.Lix
@@ -42,7 +42,7 @@ library
                      , safe           >=0.3
   default-language:    Haskell2010
 
-executable stack-hpc-coveralls
+executable shc
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -Wall

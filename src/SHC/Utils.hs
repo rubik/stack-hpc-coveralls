@@ -43,6 +43,9 @@ getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
             guard $ length fields >= 2
             return $ Remote (head fields) (fields !! 1)
 
+checkStackVersion :: IO Bool
+checkStackVersion = ("Version 0.1.7" `isPrefixOf`) <$> stack ["--version"]
+
 getHpcDir :: String -> IO FilePath
 getHpcDir package = (</> package) <$> stack ["path", "--local-hpc-root"]
 
@@ -52,7 +55,7 @@ getMixDir = (</> "hpc") <$> stack ["path", "--dist-dir"]
 dumpDirectory :: FilePath -> IO ()
 dumpDirectory path = do
     directoryExists <- doesDirectoryExist path
-    unless directoryExists $ putStrLn ("Couldn't find the directory " ++ path)
+    unless directoryExists $ putStrLn $ "Couldn't find the directory " ++ path
     putStrLn $ "Dumping " ++ path ++ " directory content:"
     contents <- getDirectoryContents path
     traverse putStrLn contents

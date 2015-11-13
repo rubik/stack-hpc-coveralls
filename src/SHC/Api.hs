@@ -4,7 +4,7 @@ module SHC.Api (sendData, readCoverageResult)
 
 import Safe (atMay, headMay)
 import Data.Aeson (Value, encode)
-import Data.Aeson.Lens (key, _String)
+import Data.Aeson.Lens (key, _Double, _String)
 import qualified Data.Text as T
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as LBS
@@ -36,18 +36,8 @@ readResponse r =
                     Just url -> PostSuccess $ T.unpack url
                     Nothing  -> PostFailure "Error: malformed response body"
 
--- | Extract the total coverage percentage value from coveralls coverage result
---   page content.  The current implementation is kept as low level as possible
---   in order not to increase the library build time, by not relying on
---   additional packages.
-extractCoverage :: T.Text -> Maybe T.Text
-extractCoverage body = T.splitOn "<"
-                    <$> T.splitOn prefix body `atMay` 1 >>= headMay
-    where prefix = "div class='run-statistics'>\n<strong>"
-
 -- | Read the coveraege result page from coveralls.io
-readCoverageResult :: String -> IO (Maybe String)
+readCoverageResult :: String -> IO (Maybe Double)
 readCoverageResult url = do
     r <- get url
-    return . fmap T.unpack . extractCoverage $
-        r ^. responseBody . _String
+    return $ r ^? responseBody . key "covered_percent" . _Double

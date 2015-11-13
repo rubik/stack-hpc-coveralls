@@ -10,7 +10,7 @@
 --
 -- Functions for reading, converting and sending HPC output to coveralls.io.
 
-module SHC.Coveralls (generateCoverallsFromTix)
+module SHC.Coverage (generateCoverallsFromTix)
     where
 
 import           Control.Applicative
