@@ -23,11 +23,6 @@
     Coveralls.io integration for Stack-based Haskell projects.
 </p>
 
-<p align="center">
-    <img alt="Argon screenshot"
-         src="https://cloud.githubusercontent.com/assets/238549/10644166/5a0f5efc-7827-11e5-9b29-6e7bcccb2345.png">
-</p>
-
 <hr>
 
 ### Installing
