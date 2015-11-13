@@ -36,8 +36,8 @@ order to avoid all the compilation hassle.
 ### Running
 
 SHC should work out of the box in any Stack-based project. It may work in other
-scenarios if you supply the right options, but that's not guaranteed. With
-plain Cabal, there is already
+scenarios if you supply the right options, but that's not guaranteed, nor
+supported. For plain Cabal projects, there is already
 [hpc-coveralls](https://github.com/guillaume-nargeot/hpc-coveralls), of which
 SHC is a spinoff.
 
@@ -45,6 +45,10 @@ Normally, for Stack projects, SHC just needs two things:
 
   - the name of your package
   - the name of the test suite that generated the coverage data
+
+Just run the program from the root of you Stack project:
+
+    $ shc packagename package-tests
 
 Here is, for example, the Travis configuration for the
 [Argon](https://github.com/rubik/argon) project:
