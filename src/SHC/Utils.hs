@@ -1,3 +1,12 @@
+-- |
+-- Module:      SHC.Utils
+-- Copyright:   (c) 2014-2015 Guillaume Nargeot
+-- License:     BSD3
+-- Maintainer:  Michele Lacchia <michelelacchia@gmail.com>
+-- Stability:   experimental
+--
+-- Utility functions used in other modules.
+
 module SHC.Utils
     where
 

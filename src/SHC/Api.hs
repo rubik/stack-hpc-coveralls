@@ -1,4 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
+
+-- |
+-- Module:      SHC.Lix
+-- Copyright:   (c) 2015 Michele Lacchia
+-- License:     ISC
+-- Maintainer:  Michele Lacchia <michelelacchia@gmail.com>
+-- Stability:   experimental
+-- Portability: portable
+--
+-- Functions for sending data to Coveralls.io and reading results.
+
 module SHC.Api (sendData, readCoverageResult)
     where
 
