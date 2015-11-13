@@ -111,7 +111,7 @@ readCoverageData conf suite = do
     mTix <- readTix tixPath
     case mTix of
         Nothing -> putStrLn ("Couldn't find the file " ++ tixPath) >>
-                   dumpDirectoryTree (hpcDir conf) >> exitFailure
+                   exitFailure
         Just (Tix tixs) -> do
             mixs <- mapM (readMix' conf) tixs
             let files = map filePath mixs

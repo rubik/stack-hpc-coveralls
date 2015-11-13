@@ -3,13 +3,10 @@ module SHC.Utils
 
 import Data.List
 import Data.Function (on)
-import Data.Traversable (traverse)
-import Control.Monad (guard, unless)
+import Control.Monad (guard)
 import Control.Applicative ((<$>), (<*>))
 import System.Process (readProcess)
 import System.FilePath ((</>))
-import System.Directory (doesDirectoryExist, getDirectoryContents)
-import System.Directory.Tree (AnchoredDirTree(..), dirTree, readDirectoryWith)
 
 import SHC.Types
 
@@ -51,22 +48,6 @@ getHpcDir package = (</> package) <$> stack ["path", "--local-hpc-root"]
 
 getMixDir :: IO FilePath
 getMixDir = (</> "hpc") <$> stack ["path", "--dist-dir"]
-
-dumpDirectory :: FilePath -> IO ()
-dumpDirectory path = do
-    directoryExists <- doesDirectoryExist path
-    unless directoryExists $ putStrLn $ "Couldn't find the directory " ++ path
-    putStrLn $ "Dumping " ++ path ++ " directory content:"
-    contents <- getDirectoryContents path
-    traverse putStrLn contents
-    return ()
-
-dumpDirectoryTree :: FilePath -> IO ()
-dumpDirectoryTree path = do
-    putStrLn $ "Dumping " ++ path ++ " directory tree:"
-    tree <- readDirectoryWith return path
-    traverse putStrLn $ dirTree tree
-    return ()
 
 fst3 :: (a, b, c) -> a
 fst3 (x, _, _) = x

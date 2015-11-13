@@ -2,7 +2,6 @@
 module SHC.Api (sendData, readCoverageResult)
     where
 
-import Safe (atMay, headMay)
 import Data.Aeson (Value, encode)
 import Data.Aeson.Lens (key, _Double, _String)
 import qualified Data.Text as T
