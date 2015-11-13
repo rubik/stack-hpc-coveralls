@@ -28,20 +28,19 @@ toHit xs
     | otherwise = None
 
 getLine :: MixEntry -> Int
-getLine = fffst . fromHpcPos . fst
-    where fffst (x, _, _, _) = x
+getLine = fst4 . fromHpcPos . fst
 
 toLineHit :: CoverageEntry -> (Int, Bool)
-toLineHit (entries, counts, _source) = (getLine (head entries) - 1, all (> 0) counts)
+toLineHit (entries, counts, _) = (getLine (head entries) - 1, all (> 0) counts)
 
 isOtherwiseEntry :: CoverageEntry -> Bool
 isOtherwiseEntry (mixEntries, _, source) =
     source == ["otherwise"] && boxLabels == otherwiseBoxLabels
     where boxLabels = map snd mixEntries
-          otherwiseBoxLabels = [
-              ExpBox False,
-              BinBox GuardBinBox True,
-              BinBox GuardBinBox False]
+          otherwiseBoxLabels = [ ExpBox False
+                               , BinBox GuardBinBox True
+                               , BinBox GuardBinBox False
+                               ]
 
 adjust :: CoverageEntry -> CoverageEntry
 adjust coverageEntry@(mixEntries, tixs, source) =

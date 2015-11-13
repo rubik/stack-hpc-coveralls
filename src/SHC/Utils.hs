@@ -83,10 +83,6 @@ fst4 (x, _, _, _) = x
 toFirstAndRest :: (a, b, c, d) -> (a, (b, c, d))
 toFirstAndRest (a, b, c, d) = (a, (b, c, d))
 
-listToMaybe :: [a] -> Maybe [a]
-listToMaybe [] = Nothing
-listToMaybe xs = Just xs
-
 mcons :: Maybe a -> [a] -> [a]
 mcons Nothing xs = xs
 mcons (Just x) xs = x : xs
@@ -100,7 +96,7 @@ mapFirst _ []       = []
 
 mapLast :: (a -> a) -> [a] -> [a]
 mapLast f [x]      = [f x]
-mapLast f (x : xs) = x : mapLast f xs
+mapLast f (x:xs) = x:mapLast f xs
 mapLast _ []       = []
 
 subSeq :: Int -> Int -> [a] -> [a]
