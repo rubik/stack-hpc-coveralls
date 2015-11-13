@@ -33,6 +33,9 @@ it's best to just download the right precompiled binary in the [Releases
 section](https://github.com/rubik/stack-hpc-coveralls/releases) on Github, in
 order to avoid all the compilation hassle.
 
+**IMPORTANT NOTICE**: SHC needs at least Stack 0.1.7, which at the time of
+writing is still unreleased and in development.
+
 ### Running
 
 SHC should work out of the box in any Stack-based project. It may work in other
