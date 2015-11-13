@@ -49,12 +49,15 @@ getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
             guard $ length fields >= 2
             return $ Remote (head fields) (fields !! 1)
 
+-- | Verify that the required Stack is present.
 checkStackVersion :: IO Bool
 checkStackVersion = ("Version 0.1.7" `isPrefixOf`) <$> stack ["--version"]
 
+-- | Return the HPC data directory, given the package name.
 getHpcDir :: String -> IO FilePath
 getHpcDir package = (</> package) <$> stack ["path", "--local-hpc-root"]
 
+-- | Return the HPC mix directory, where module data is stored.
 getMixDir :: IO FilePath
 getMixDir = (</> "hpc") <$> stack ["path", "--dist-dir"]
 

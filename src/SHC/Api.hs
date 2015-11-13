@@ -28,7 +28,11 @@ import Network.HTTP.Client.MultipartFormData (partFileRequestBody)
 import SHC.Types
 
 
-sendData :: Config -> String -> Value -> IO PostResult
+-- | Send coverage JSON to Coveralls.io.
+sendData :: Config        -- ^ SHC configuration
+         -> String        -- ^ URL
+         -> Value         -- ^ The JSON object
+         -> IO PostResult
 sendData conf url json = do
     r <- post url [partFileRequestBody "json_file" fileName requestBody]
     if r ^. responseStatus . statusCode == 200
@@ -46,7 +50,7 @@ readResponse r =
                     Just url -> PostSuccess $ T.unpack url
                     Nothing  -> PostFailure "Error: malformed response body"
 
--- | Read the coveraege result page from coveralls.io
+-- | Read the coverage results from Coveralls.io.
 readCoverageResult :: String -> IO (Maybe Double)
 readCoverageResult url = do
     r <- get url
