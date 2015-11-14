@@ -5,10 +5,14 @@
 </h1>
 
 <p align="center">
-    <!--<a href="https://travis-ci.org/rubik/argon">-->
-        <!--<img alt="Tests"-->
-             <!--src="https://img.shields.io/travis/rubik/argon.svg?style=flat-square">-->
-    <!--</a>-->
+    <a href="https://travis-ci.org/rubik/stack-hpc-coveralls">
+        <img alt="Tests"
+             src="https://img.shields.io/travis/rubik/stack-hpc-coveralls.svg?style=flat-square">
+    </a>
+    <a href="https://coveralls.io/github/rubik/stack-hpc-coveralls">
+        <img alt="Code coverage"
+             src="https://img.shields.io/coveralls/rubik/stack-hpc-coveralls.svg?style=flat-square">
+    </a>
     <a href="https://github.com/rubik/stack-hpc-coveralls/blob/master/LICENSE">
         <img alt="License"
              src="https://img.shields.io/badge/license-ISC-blue.svg?style=flat-square">
