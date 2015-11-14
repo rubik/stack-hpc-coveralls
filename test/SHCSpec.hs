@@ -6,20 +6,16 @@ import Test.Hspec.Contrib.HUnit
 import Test.HUnit
 
 import SHC.Types
-import SHC.Lix
+import SHCHUnits
 
 
 spec :: Spec
 spec = do
-    fromHUnitTest ("SHC.Lix" ~: "toHit" ~:
-        [ Irrelevant @=? toHit []
-        , None       @=? toHit [False]
-        , None       @=? toHit [False, False]
-        , Partial    @=? toHit [False, True]
-        , Partial    @=? toHit [True, False]
-        , Partial    @=? toHit [False, False, True]
-        , Partial    @=? toHit [False, True, False]
-        , Partial    @=? toHit [True, False, False]
-        , Full       @=? toHit [True]
-        , Full       @=? toHit [True, True]
-        ])
+    describe "SHC.Lix" $
+        fromHUnitTest testToHit
+    describe "SHC.Utils" $ do
+        fromHUnitTest testMapFirst
+        fromHUnitTest testMapLast
+        fromHUnitTest testSubSeq
+        fromHUnitTest testSubSubSeq
+        fromHUnitTest testGroupByIndex
