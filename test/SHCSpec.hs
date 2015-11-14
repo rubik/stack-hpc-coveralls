@@ -2,9 +2,9 @@
 module SHCSpec (spec)
     where
 
-import Prelude hiding (getLine)
 import Test.Hspec
 import Test.Hspec.Contrib.HUnit
+import Trace.Hpc.Mix
 import Trace.Hpc.Util
 import Control.DeepSeq (force)
 import Control.Exception (evaluate)
@@ -12,6 +12,7 @@ import Control.Exception (evaluate)
 import SHCHUnits
 
 import SHC.Lix
+import SHC.Types
 import SHC.Utils
 
 
@@ -20,8 +21,8 @@ spec = do
     describe "SHC.Lix" $ do
         describe "toHit" $
             fromHUnitTest testToHit
-        it "getLine" $
-            getLine (toHpcPos (1, 2, 3, 4), undefined) `shouldBe` 1
+        it "startLine" $
+            startLine (toHpcPos (1, 2, 3, 4), undefined) `shouldBe` 1
         describe "toLineHit" $ do
             it "throws an exception with empty lists" $
                 evaluate (force (toLineHit ([], [], [""]))) `shouldThrow` anyException
@@ -30,6 +31,12 @@ spec = do
             fromHUnitTest testIsOtherwiseEntry
         describe "adjust" $
             fromHUnitTest testAdjust
+        it "toLix" $
+            toLix 3  [ ([(toHpcPos (1, 2, 3, 4), ExpBox True)], [1, 2, 3, 0, 1, 4], ["a"])
+                     , ([(toHpcPos (1, 2, 3, 8), ExpBox True)], [1, 2, 3, 3, 1, 4], ["a"])
+                     , ([(toHpcPos (2, 5, 6, 7), ExpBox True)], [1, 2, 3, 4, 2, 4], ["b"])
+                     , ([(toHpcPos (3, 8, 9, 9), ExpBox True)], [0], ["c"])
+                     ] `shouldBe` [Partial, Full, None]
     describe "SHC.Utils" $ do
         it "fst3" $ fst3 (1, 2, 3) `shouldBe` 1
         it "snd3" $ snd3 (1, 2, 3) `shouldBe` 2

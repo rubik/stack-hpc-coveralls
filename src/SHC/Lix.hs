@@ -13,7 +13,6 @@ module SHC.Lix
 
 import Data.Ord
 import Data.List
-import Prelude hiding (getLine)
 import SHC.Types
 import SHC.Utils
 import Trace.Hpc.Mix
@@ -27,11 +26,11 @@ toHit xs
     | or xs     = Partial
     | otherwise = None
 
-getLine :: MixEntry -> Int
-getLine = fst4 . fromHpcPos . fst
+startLine :: MixEntry -> Int
+startLine = fst4 . fromHpcPos . fst
 
 toLineHit :: CoverageEntry -> (Int, Bool)
-toLineHit (entries, counts, _) = (getLine (head entries) - 1, all (> 0) counts)
+toLineHit (entries, counts, _) = (startLine (head entries) - 1, all (> 0) counts)
 
 isOtherwiseEntry :: CoverageEntry -> Bool
 isOtherwiseEntry (mixEntries, _, source) =
@@ -52,6 +51,6 @@ adjust coverageEntry@(mixEntries, tixs, source) =
 toLix :: Int             -- ^ Source line count
       -> [CoverageEntry] -- ^ Mix entries and associated hit count
       -> Lix             -- ^ Line coverage
-toLix lineCount entries = map toHit (groupByIndex lineCount sortedLineHits)
+toLix lineCount entries = map toHit $ groupByIndex lineCount sortedLineHits
     where sortedLineHits = sortBy (comparing fst) lineHits
           lineHits = map (toLineHit . adjust) entries
