@@ -1,5 +1,5 @@
 <h1 align="center">
-    <a href="https://github.com/rubik/argon">
+    <a href="https://github.com/rubik/stack-hpc-coverage">
         Stack HPC Coveralls (SHC)
     </a>
 </h1>

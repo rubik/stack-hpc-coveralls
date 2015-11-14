@@ -16,7 +16,10 @@ import System.Console.Docopt
 import System.Environment (getArgs, getEnv, getEnvironment)
 import System.Exit (exitFailure)
 
-import SHC
+import SHC.Api
+import SHC.Utils
+import SHC.Types
+import SHC.Coverage
 
 
 urlApiV1 :: String
@@ -75,8 +78,8 @@ main = do
        else do
          response <- sendData conf urlApiV1 coverallsJson
          case response of
-             PostSuccess url -> do
-                 let apiUrl = url ++ ".json"
+             PostSuccess u -> do
+                 let apiUrl = u ++ ".json"
                  putStrLn $ "Job URL: " ++ apiUrl
                  -- wait 5 seconds until the page is available
                  threadDelay $ 5 * 1000 * 1000
