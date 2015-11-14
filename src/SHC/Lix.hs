@@ -45,8 +45,8 @@ isOtherwiseEntry (mixEntries, _, source) =
 adjust :: CoverageEntry -> CoverageEntry
 adjust coverageEntry@(mixEntries, tixs, source) =
     if isOtherwiseEntry coverageEntry && any (> 0) tixs
-    then (mixEntries, [1, 1, 1], source)
-    else coverageEntry
+       then (mixEntries, [1, 1, 1], source)
+       else coverageEntry
 
 -- | Convert hpc coverage entries into a line based coverage format
 toLix :: Int             -- ^ Source line count
