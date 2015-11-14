@@ -78,19 +78,19 @@ toFirstAndRest (a, b, c, d) = (a, (b, c, d))
 
 mcons :: Maybe a -> [a] -> [a]
 mcons Nothing xs = xs
-mcons (Just x) xs = x : xs
+mcons (Just x) xs = x:xs
 
 matchAny :: [String] -> String -> Bool
 matchAny patterns fileName = any (`isPrefixOf` fileName) patterns
 
 mapFirst :: (a -> a) -> [a] -> [a]
-mapFirst f (x : xs) = f x : xs
-mapFirst _ []       = []
+mapFirst f (x:xs) = f x : xs
+mapFirst _ []     = []
 
 mapLast :: (a -> a) -> [a] -> [a]
-mapLast f [x]      = [f x]
-mapLast f (x:xs) = x:mapLast f xs
-mapLast _ []       = []
+mapLast f [x]    = [f x]
+mapLast f (x:xs) = x : mapLast f xs
+mapLast _ []     = []
 
 subSeq :: Int -> Int -> [a] -> [a]
 subSeq start end = drop start . take end
@@ -101,6 +101,6 @@ subSubSeq start end = mapFirst (drop start) . mapLast (take end)
 groupByIndex :: Int -> [(Int, a)] -> [[a]]
 groupByIndex size = take size . flip (++) (repeat []) . groupByIndex' 0 []
     where groupByIndex' _ ys [] = [ys]
-          groupByIndex' i ys xx@((xi, x) : xs) = if xi == i
-              then groupByIndex' i (x : ys) xs
+          groupByIndex' i ys xx@((xi, x):xs) = if xi == i
+              then groupByIndex' i (x:ys) xs
               else ys : groupByIndex' (i + 1) [] xx
