@@ -26,6 +26,10 @@ spec = do
             it "throws an exception with empty lists" $
                 evaluate (force (toLineHit ([], [], [""]))) `shouldThrow` anyException
             fromHUnitTest testToLineHit
+        describe "isOtherwiseEntry" $
+            fromHUnitTest testIsOtherwiseEntry
+        describe "adjust" $
+            fromHUnitTest testAdjust
     describe "SHC.Utils" $ do
         it "fst3" $ fst3 (1, 2, 3) `shouldBe` 1
         it "snd3" $ snd3 (1, 2, 3) `shouldBe` 2
@@ -33,10 +37,17 @@ spec = do
         it "fst4" $ fst4 (1, 2, 3, 4) `shouldBe` 1
         it "toFirstAndRest" $
             toFirstAndRest (1, 2, 3, 4) `shouldBe` (1, (2, 3, 4))
-        fromHUnitTest testMcons
-        fromHUnitTest testMatchAny
-        fromHUnitTest testMapFirst
-        fromHUnitTest testMapLast
-        fromHUnitTest testSubSeq
-        fromHUnitTest testSubSubSeq
-        fromHUnitTest testGroupByIndex
+        describe "mcons" $
+            fromHUnitTest testMcons
+        describe "matchAny" $
+            fromHUnitTest testMatchAny
+        describe "mapFirst" $
+            fromHUnitTest testMapFirst
+        describe "mapLast" $
+            fromHUnitTest testMapLast
+        describe "subSeq" $
+            fromHUnitTest testSubSeq
+        describe "subSubSeq" $
+            fromHUnitTest testSubSubSeq
+        describe "groupByIndex" $
+            fromHUnitTest testGroupByIndex

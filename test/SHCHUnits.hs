@@ -3,6 +3,7 @@ module SHCHUnits
     where
 
 import Test.HUnit
+import Trace.Hpc.Mix
 import Trace.Hpc.Util
 
 import SHC.Lix
@@ -13,6 +14,15 @@ import SHC.Utils
 (~::) :: String -> [Assertion] -> Test
 label ~:: tests = TestList $
     zipWith (\i -> TestLabel $ label ++ " " ++ show i) [1..] (map TestCase tests)
+
+boxes :: [MixEntry]
+boxes = [ (undefined, ExpBox False)
+        , (undefined, BinBox GuardBinBox True)
+        , (undefined, BinBox GuardBinBox False)
+        ]
+
+boxes2 :: [MixEntry]
+boxes2 = map (\(_, b) -> (toHpcPos (1, 2, 3, 4), b)) boxes
 
 testToHit :: Test
 testToHit = "toHit" ~::
@@ -38,6 +48,23 @@ testToLineHit = "toLineHit" ~::
                 , [0], undefined)    @?= (3, False)
     , toLineHit ( [(toHpcPos (4, 5, 6, 2), undefined)]
                 , [0, 1], undefined) @?= (3, False)
+    ]
+
+testIsOtherwiseEntry :: Test
+testIsOtherwiseEntry = "testIsOtherwiseEntry" ~::
+    [ isOtherwiseEntry ([], undefined, [])               @?= False
+    , isOtherwiseEntry ([], undefined, ["otherwise"])    @?= False
+    , isOtherwiseEntry (boxes, undefined, [])            @?= False
+    , isOtherwiseEntry (boxes, undefined, ["otherwise"]) @?= True
+    ]
+
+testAdjust :: Test
+testAdjust = "testAdjust" ~::
+    [ adjust (boxes2, [], ["otherwise"])  @?= (boxes2, [], ["otherwise"])
+    , adjust (boxes2, [0], ["otherwise"]) @?= (boxes2, [0], ["otherwise"])
+    , adjust (boxes2, [1], ["otherwise"]) @?= (boxes2, [1, 1, 1], ["otherwise"])
+    , adjust ([], [0], ["otherwise"])     @?= ([], [0], ["otherwise"])
+    , adjust ([], [0], [])                @?= ([], [0], [])
     ]
 
 testMcons :: Test
