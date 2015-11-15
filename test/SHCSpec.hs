@@ -1,4 +1,6 @@
-{-# OPTIONS_GHC -fno-warn-type-defaults #-}
+{-# OPTIONS_GHC -fno-warn-type-defaults -fno-warn-orphans #-}
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
 module SHCSpec (spec)
     where
@@ -21,6 +23,10 @@ import SHC.Lix
 import SHC.Types
 import SHC.Utils
 import SHC.Coverage
+
+#if __GLASGOW_HASKELL__ < 710
+deriving instance Eq Mix
+#endif
 
 
 covEntries :: [CoverageEntry]
