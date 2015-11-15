@@ -11,7 +11,7 @@
 --
 -- Functions for reading, converting and sending HPC output to coveralls.io.
 
-module SHC.Coverage (generateCoverallsFromTix)
+module SHC.Coverage
     where
 
 #if __GLASGOW_HASKELL__ < 710
