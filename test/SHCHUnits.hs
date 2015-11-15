@@ -22,7 +22,7 @@ boxes = [ (undefined, ExpBox False)
         ]
 
 boxes2 :: [MixEntry]
-boxes2 = map (\(_, b) -> (toHpcPos (1, 2, 3, 4), b)) boxes
+boxes2 = map (\(_, b) -> (toHpcPos (1, 1, 1, 2), b)) boxes
 
 testToHit :: Test
 testToHit = "toHit" ~::

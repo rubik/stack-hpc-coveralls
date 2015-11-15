@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-type-defaults #-}
+{-# LANGUAGE OverloadedStrings #-}
 module SHCSpec (spec)
     where
 
@@ -27,6 +28,9 @@ covEntries =
     , ([(toHpcPos (4, 8, 9, 9), ExpBox True)], [0], ["c"])
     ]
 
+mix :: Mix
+mix = Mix undefined undefined undefined undefined boxes2
+
 spec :: Spec
 spec = do
     describe "SHC.Coverage" $ do
@@ -37,6 +41,15 @@ spec = do
             it "works with looseConverter" $
                 toSimpleCoverage looseConverter 4 covEntries `shouldBe`
                     [Number 1, Number 2, Null, Number 0]
+        describe "coverageToJson" $
+            it "works with standard coverage data" $
+                coverageToJson strictConverter "path"
+                               ("a\nb\nc\n", mix, [1, 2, 3])
+                    `shouldBe`
+                    object [ "name"          .= ("path"::String)
+                           , "source_digest" .= ("40c53c58fdafacc83cfff6ee3d2f6d69"::String)
+                           , "coverage"      .= [Number 1, Null, Null]
+                           ]
     describe "SHC.Lix" $ do
         describe "toHit" $
             fromHUnitTest testToHit
