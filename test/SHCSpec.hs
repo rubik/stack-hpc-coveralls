@@ -4,12 +4,15 @@ module SHCSpec (spec)
     where
 
 import Data.Aeson
+import Data.Time.Clock (getCurrentTime)
+import qualified Data.Map.Strict as M
 import Test.Hspec
 import Test.Hspec.Contrib.HUnit
 import Trace.Hpc.Mix
 import Trace.Hpc.Util
 import Control.DeepSeq (force)
 import Control.Exception (evaluate)
+import System.IO.Unsafe (unsafePerformIO)
 
 import SHCHUnits
 
@@ -31,6 +34,9 @@ covEntries =
 mix :: Mix
 mix = Mix undefined undefined undefined undefined boxes2
 
+mix2 :: Mix
+mix2 = Mix "path" (unsafePerformIO getCurrentTime) (toHash 'c') 3 boxes2
+
 spec :: Spec
 spec = do
     describe "SHC.Coverage" $ do
@@ -50,6 +56,17 @@ spec = do
                            , "source_digest" .= ("40c53c58fdafacc83cfff6ee3d2f6d69"::String)
                            , "coverage"      .= [Number 1, Null, Null]
                            ]
+        describe "mergeCoverageData" $
+            it "works with standard coverage data" $
+                mergeCoverageData
+                     [ M.fromList [ ("path1", ("", mix2, [1, 2, 3]))
+                                  , ("path2", ("a", mix2, [4, 5, 6]))
+                                  ]
+                     , M.fromList [("path1", ("c", mix2, [8, 1, 3]))]
+                     ]
+                    `shouldBe` M.fromList [ ("path1", ("", mix2, [9, 3, 6]))
+                                          , ("path2", ("a", mix2, [4, 5, 6]))
+                                          ]
     describe "SHC.Lix" $ do
         describe "toHit" $
             fromHUnitTest testToHit

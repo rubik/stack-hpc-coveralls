@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 -- |
 -- Module:      SHC.Utils
 -- Copyright:   (c) 2014-2015 Guillaume Nargeot
@@ -13,7 +14,9 @@ module SHC.Utils
 import Data.List
 import Data.Function (on)
 import Control.Monad (guard)
+#if __GLASGOW_HASKELL__ < 710
 import Control.Applicative ((<$>), (<*>))
+#endif
 import System.Process (readProcess)
 import System.FilePath ((</>))
 
@@ -21,7 +24,7 @@ import SHC.Types
 
 
 readP :: String -> [String] -> IO String
-readP name args = init <$> readProcess name args []  -- strip trailing \n
+readP cmd args = init <$> readProcess cmd args []  -- strip trailing \n
 
 git :: [String] -> IO String
 git = readP "git"
@@ -31,14 +34,14 @@ stack = readP "stack"
 
 -- | Get information about the Git repo in the current directory.
 getGitInfo :: IO GitInfo
-getGitInfo = GitInfo <$> headRef <*> branch <*> getRemotes
+getGitInfo = GitInfo <$> headRef <*> branchName <*> getRemotes
     where headRef = Commit <$> git ["rev-parse", "HEAD"]
                            <*> git ["log", "-1", "--pretty=%aN"]
                            <*> git ["log", "-1", "--pretty=%aE"]
                            <*> git ["log", "-1", "--pretty=%cN"]
                            <*> git ["log", "-1", "--pretty=%cE"]
                            <*> git ["log", "-1", "--pretty=%s"]
-          branch = git ["rev-parse", "--abbrev-ref", "HEAD"]
+          branchName = git ["rev-parse", "--abbrev-ref", "HEAD"]
 
 getRemotes :: IO [Remote]
 getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
