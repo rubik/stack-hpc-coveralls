@@ -29,7 +29,7 @@ data PostResult = PostSuccess String
                 deriving (Show)
 
 data Config = Config {
-    suiteName   :: String
+    suitesName  :: [String]
   , serviceName :: String
   , jobId       :: String
   , repoToken   :: Maybe String

@@ -67,11 +67,10 @@ readMix' conf tix = readMix [SHC.Types.mixDir conf] (Right tix)
 -- | Generate Coveralls JSON formatted code coverage from HPC coverage data
 generateCoverallsFromTix :: Config -> IO Value
 generateCoverallsFromTix conf = do
-    -- XXX: fix suites
-    testSuitesCoverages <- mapM (readCoverageData conf) [testSuiteName]
+    testSuitesCoverages <- mapM (readCoverageData conf) testSuitesName
     let coverageData = mergeCoverageData testSuitesCoverages
     return $ toCoverallsJson conf converter coverageData
-    where testSuiteName = suiteName conf
+    where testSuitesName = suitesName conf
           converter = case conversion conf of
               FullLines -> strictConverter
               PartialLines -> looseConverter

@@ -52,8 +52,11 @@ defaultOr args opt action = maybe action return $ args `getArg` opt
 getConfig :: Arguments -> IO Config
 getConfig args = do
     pn <- args `getArgOrExit` argument "package-name"
+    let suites = args `getAllArgs` argument "suite-name"
+    unless (not $ null suites) $
+        putStrLn "Error: provide at least one test-suite name" >> exitFailure
     (sn, jId) <- getServiceAndJobId
-    Config <$> args `getArgOrExit` argument "suite-name"
+    Config <$> pure suites
            <*> pure sn
            <*> pure jId
            <*> pure (args `getArg` longOption "repo-token")
