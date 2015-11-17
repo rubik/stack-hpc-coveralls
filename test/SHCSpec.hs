@@ -1,28 +1,28 @@
 {-# OPTIONS_GHC -fno-warn-type-defaults -fno-warn-orphans #-}
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP                #-}
+{-# LANGUAGE OverloadedStrings  #-}
 {-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE OverloadedStrings #-}
 module SHCSpec (spec)
     where
 
-import Data.Aeson
-import Data.Time.Clock (getCurrentTime)
-import qualified Data.Map.Strict as M
-import Test.Hspec
-import Test.Hspec.Contrib.HUnit
-import Trace.Hpc.Mix
-import Trace.Hpc.Util
-import Control.DeepSeq (force)
-import Control.Exception (evaluate)
-import System.IO.Unsafe (unsafePerformIO)
+import           Control.DeepSeq          (force)
+import           Control.Exception        (evaluate)
+import           Data.Aeson
+import qualified Data.Map.Strict          as M
+import           Data.Time.Clock          (getCurrentTime)
+import           System.IO.Unsafe         (unsafePerformIO)
+import           Test.Hspec
+import           Test.Hspec.Contrib.HUnit
+import           Trace.Hpc.Mix
+import           Trace.Hpc.Util
 
-import SHCHUnits
+import           SHCHUnits
 
-import SHC.Api
-import SHC.Lix
-import SHC.Types
-import SHC.Utils
-import SHC.Coverage
+import           SHC.Api
+import           SHC.Coverage
+import           SHC.Lix
+import           SHC.Types
+import           SHC.Utils
 
 #if __GLASGOW_HASKELL__ < 710
 deriving instance Eq Mix

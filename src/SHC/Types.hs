@@ -3,18 +3,19 @@
 module SHC.Types
     where
 
-import Data.Aeson
-import Trace.Hpc.Mix
+import           Data.Aeson
+import           Trace.Hpc.Mix
 
 
 data ConversionType = FullLines
                     | PartialLines
                     deriving (Show, Eq)
 
-type CoverageEntry = ( [MixEntry]  -- Mix entries
-                     , [Integer]   -- Tix values
-                     , [String]    -- Entry source code
-                     )
+type CoverageEntry =
+    ( [MixEntry]  -- Mix entries
+    , [Integer]   -- Tix values
+    , [String]    -- Entry source code
+    )
 
 data Hit = Full
          | Partial
@@ -28,36 +29,36 @@ data PostResult = PostSuccess String
                 | PostFailure String
                 deriving (Show)
 
-data Config = Config {
-    suitesName  :: [String]
-  , serviceName :: String
-  , jobId       :: String
-  , repoToken   :: Maybe String
-  , gitInfo     :: GitInfo
-  , hpcDir      :: FilePath
-  , mixDir      :: FilePath
-  , conversion  :: ConversionType
-  }
+data Config = Config
+    { suitesName  :: [String]
+    , serviceName :: String
+    , jobId       :: String
+    , repoToken   :: Maybe String
+    , gitInfo     :: GitInfo
+    , hpcDir      :: FilePath
+    , mixDir      :: FilePath
+    , conversion  :: ConversionType
+    }
 
-data GitInfo = GitInfo {
-    headRef :: Commit
-  , branch  :: String
-  , remotes :: [Remote]
-  }
+data GitInfo = GitInfo
+    { headRef :: Commit
+    , branch  :: String
+    , remotes :: [Remote]
+    }
 
-data Commit = Commit {
-    hash           :: String
-  , authorName     :: String
-  , authorEmail    :: String
-  , committerName  :: String
-  , committerEmail :: String
-  , message        :: String
-  }
+data Commit = Commit
+    { hash           :: String
+    , authorName     :: String
+    , authorEmail    :: String
+    , committerName  :: String
+    , committerEmail :: String
+    , message        :: String
+    }
 
-data Remote = Remote {
-    name :: String
-  , url  :: String
-  }
+data Remote = Remote
+    { name :: String
+    , url  :: String
+    }
 
 instance ToJSON GitInfo where
     toJSON i = object [ "head"    .= headRef i

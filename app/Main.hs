@@ -1,25 +1,25 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP         #-}
 {-# LANGUAGE QuasiQuotes #-}
 module Main
     where
 
-import Data.List (find)
-import Data.Maybe (isJust)
-import Data.Aeson (encode)
-import qualified Data.ByteString.Lazy as BSL
-import Control.Monad (unless)
+import           Control.Monad         (unless)
+import           Data.Aeson            (encode)
+import qualified Data.ByteString.Lazy  as BSL
+import           Data.List             (find)
+import           Data.Maybe            (isJust)
 #if __GLASGOW_HASKELL__ < 710
-import Control.Applicative (pure, (<$>), (<*>))
+import           Control.Applicative   (pure, (<$>), (<*>))
 #endif
-import Control.Concurrent (threadDelay)
-import System.Console.Docopt
-import System.Environment (getArgs, getEnv, getEnvironment)
-import System.Exit (exitFailure)
+import           Control.Concurrent    (threadDelay)
+import           System.Console.Docopt
+import           System.Environment    (getArgs, getEnv, getEnvironment)
+import           System.Exit           (exitFailure)
 
-import SHC.Api
-import SHC.Utils
-import SHC.Types
-import SHC.Coverage
+import           SHC.Api
+import           SHC.Coverage
+import           SHC.Types
+import           SHC.Utils
 
 
 urlApiV1 :: String

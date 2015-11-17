@@ -11,12 +11,12 @@
 module SHC.Lix
     where
 
-import Data.Ord
-import Data.List
-import SHC.Types
-import SHC.Utils
-import Trace.Hpc.Mix
-import Trace.Hpc.Util
+import           Data.List
+import           Data.Ord
+import           SHC.Types
+import           SHC.Utils
+import           Trace.Hpc.Mix
+import           Trace.Hpc.Util
 
 toHit :: [Bool] -> Hit
 toHit []  = Irrelevant

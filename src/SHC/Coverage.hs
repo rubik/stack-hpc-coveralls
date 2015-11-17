@@ -1,5 +1,5 @@
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE CPP               #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- |
@@ -18,17 +18,17 @@ module SHC.Coverage
 import           Control.Applicative
 #endif
 import           Data.Aeson
-import           Data.Aeson.Types ()
+import           Data.Aeson.Types           ()
 import qualified Data.ByteString.Lazy.Char8 as LBS
 import           Data.Digest.Pure.MD5
 import           Data.Function
 import           Data.List
-import qualified Data.Map.Strict as M
-import           System.FilePath ((</>))
-import           System.Exit (exitFailure)
+import qualified Data.Map.Strict            as M
+import           SHC.Lix
 import           SHC.Types
 import           SHC.Utils
-import           SHC.Lix
+import           System.Exit                (exitFailure)
+import           System.FilePath            ((</>))
 import           Trace.Hpc.Mix
 import           Trace.Hpc.Tix
 import           Trace.Hpc.Util

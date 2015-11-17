@@ -2,13 +2,13 @@
 module SHCHUnits
     where
 
-import Test.HUnit
-import Trace.Hpc.Mix
-import Trace.Hpc.Util
+import           Test.HUnit
+import           Trace.Hpc.Mix
+import           Trace.Hpc.Util
 
-import SHC.Lix
-import SHC.Types
-import SHC.Utils
+import           SHC.Lix
+import           SHC.Types
+import           SHC.Utils
 
 
 (~::) :: String -> [Assertion] -> Test

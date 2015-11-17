@@ -11,16 +11,16 @@
 module SHC.Utils
     where
 
-import Data.List
-import Data.Function (on)
-import Control.Monad (guard)
+import           Control.Monad       (guard)
+import           Data.Function       (on)
+import           Data.List
 #if __GLASGOW_HASKELL__ < 710
-import Control.Applicative ((<$>), (<*>))
+import           Control.Applicative ((<$>), (<*>))
 #endif
-import System.Process (readProcess)
-import System.FilePath ((</>))
+import           System.FilePath     ((</>))
+import           System.Process      (readProcess)
 
-import SHC.Types
+import           SHC.Types
 
 
 readP :: String -> [String] -> IO String

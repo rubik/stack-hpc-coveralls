@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP               #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- |
@@ -14,21 +14,22 @@
 module SHC.Api (sendData, readCoverageResult)
     where
 
-import Data.Aeson (Value, encode)
-import Data.Aeson.Lens (key, _Double, _String)
-import qualified Data.Text as T
-import qualified Data.ByteString as BS
-import qualified Data.ByteString.Lazy as LBS
-import Codec.Binary.UTF8.String (decode)
+import           Codec.Binary.UTF8.String              (decode)
+import           Data.Aeson                            (Value, encode)
+import           Data.Aeson.Lens                       (key, _Double, _String)
+import qualified Data.ByteString                       as BS
+import qualified Data.ByteString.Lazy                  as LBS
+import qualified Data.Text                             as T
 #if __GLASGOW_HASKELL__ < 710
-import Control.Applicative ((<$>))
+import           Control.Applicative                   ((<$>))
 #endif
-import Control.Lens
-import Network.Wreq
-import Network.HTTP.Client (RequestBody(RequestBodyLBS))
-import Network.HTTP.Client.MultipartFormData (partFileRequestBody)
+import           Control.Lens
+import           Network.HTTP.Client                   (RequestBody (RequestBodyLBS))
+import           Network.HTTP.Client.MultipartFormData (partFileRequestBody)
+import           Network.Wreq
 
-import SHC.Types (Config(..), PostResult(..))
+import           SHC.Types                             (Config (..),
+                                                        PostResult (..))
 
 
 -- | Send coverage JSON to Coveralls.io.
