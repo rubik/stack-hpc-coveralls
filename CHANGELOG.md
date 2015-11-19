@@ -2,6 +2,11 @@
 
 This package uses [Semantic Versioning][1].
 
+## v0.0.1.0
+
+- Alpha release.
+- Fix ``--repo-token`` option: #3
+
 ## v0.0.0.4
 
 - First usable release. SHC is used on itself.
