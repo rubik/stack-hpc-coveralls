@@ -51,7 +51,8 @@ SHC is a spinoff.
 Normally, for Stack projects, SHC just needs two things:
 
   - the name of your package
-  - the name of the test suite that generated the coverage data
+  - at least one test suite name (you can aggregate the Coverage data of
+    multiple test suites)
 
 Just run the program from the root of you Stack project:
 
