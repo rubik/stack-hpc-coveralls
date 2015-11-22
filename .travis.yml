@@ -7,9 +7,9 @@ env:
   - GHCVER=7.10.2 STACK_YAML=stack.yaml STACK_VERSION=0.1.8.0
 
 
-branches:
-  only:
-    - master
+#branches:
+#  only:
+#    - master
 
 sudo: false
 
