@@ -1,8 +1,11 @@
 language: haskell
 
 env:
-  - GHCVER=7.8.4 STACK_YAML=stack-7.8.yaml
-  - GHCVER=7.10.2 STACK_YAML=stack.yaml
+  - GHCVER=7.8.4 STACK_YAML=stack-7.8.yaml STACK_VERSION=0.1.7.0
+  - GHCVER=7.8.4 STACK_YAML=stack-7.8.yaml STACK_VERSION=0.1.8.0
+  - GHCVER=7.10.2 STACK_YAML=stack.yaml STACK_VERSION=0.1.7.0
+  - GHCVER=7.10.2 STACK_YAML=stack.yaml STACK_VERSION=0.1.8.0
+
 
 branches:
   only:
@@ -17,11 +20,14 @@ cache:
 before_install:
   - mkdir -p $HOME/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
-  #- export STACK_VERSION=0.1.6.0
-  #- export STACK_FULLVERSION=stack-$STACK_VERSION-linux-x86_64
-  #- travis_retry curl -L https://github.com/commercialhaskell/stack/releases/download/v$STACK_VERSION/$STACK_FULLVERSION.tar.gz | tar -xz -C /tmp $STACK_FULLVERSION/stack
-  #- mv /tmp/$STACK_FULLVERSION/stack $HOME/.local/bin
-  - travis_retry curl -L https://github.com/rubik/argon/releases/download/test-stack-1.7/stack-linux-x64.tar.bz2 | tar -xj -C $HOME/.local/bin
+  - export STACK_FULLVERSION=stack-$STACK_VERSION-linux-x86_64
+  - if [ $STACK_VERSION == "0.1.7.0" ]; then
+        curl -L https://github.com/rubik/argon/releases/download/test-stack-1.7/stack-linux-x64.tar.bz2 | tar -xj -C $HOME/.local/bin;
+    else
+        curl -L https://github.com/commercialhaskell/stack/releases/download/v$STACK_VERSION/$STACK_FULLVERSION.tar.gz | tar -xz -C /var/tmp;
+        mv /var/tmp/$STACK_FULLVERSION/stack $HOME/.local/bin;
+    fi
+
   - chmod a+x $HOME/.local/bin/stack
   - stack --version
 

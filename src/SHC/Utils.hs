@@ -54,7 +54,8 @@ getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
 
 -- | Verify that the required Stack is present.
 checkStackVersion :: IO Bool
-checkStackVersion = ("Version 0.1.7" `isPrefixOf`) <$> stack ["--version"]
+checkStackVersion =
+    (\ver -> "0.1.7.0" < init (words ver) !! 0) <$> stack ["--version"]
 
 -- | Return the HPC data directory, given the package name.
 getHpcDir :: String -> IO FilePath
