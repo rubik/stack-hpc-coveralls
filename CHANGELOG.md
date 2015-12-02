@@ -2,10 +2,14 @@
 
 This package uses [Semantic Versioning][1].
 
+## v0.0.2.0
+
+- Fix Stack version checking: #4.
+
 ## v0.0.1.0
 
 - Alpha release.
-- Fix ``--repo-token`` option: #3
+- Fix ``--repo-token`` option: #3.
 
 ## v0.0.0.4
 
