@@ -2,6 +2,10 @@
 
 This package uses [Semantic Versioning][1].
 
+## v0.0.3.0
+
+- Fix Stack version checking (version greater than 0.1.9): #8.
+
 ## v0.0.2.0
 
 - Fix Stack version checking: #4.
