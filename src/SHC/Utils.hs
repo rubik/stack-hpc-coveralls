@@ -57,7 +57,7 @@ getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
 -- | Verify that the required Stack is present.
 checkStackVersion :: IO Bool
 checkStackVersion = do
-    let lowerBound = makeVersion [0,1,7,0]
+    let lowerBound = Version [0,1,7,0] []
     stackVersion <- stack ["--numeric-version"]
     return $ verifyVersion stackVersion lowerBound
 
