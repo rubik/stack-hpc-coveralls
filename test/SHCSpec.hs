@@ -91,7 +91,7 @@ spec = do
             toLix 4 covEntries `shouldBe` [Partial, Full, Irrelevant, None]
     describe "SHC.Utils" $ do
         it "verifyVersion" $
-            let ver = makeVersion [0,1,7,0]
+            let ver = Version [0,1,7,0] []
             in  (not (verifyVersion "0.1.6.0" ver) &&
                  verifyVersion "0.1.7.0" ver &&
                  verifyVersion "1.100.4.56" ver) `shouldBe` True
