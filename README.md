@@ -72,6 +72,6 @@ script:
   - stack test :argon-test --no-terminal --coverage
 
 after_script:
-  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.0.4/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
+  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.3.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
   - ./shc argon argon-test
 ```
