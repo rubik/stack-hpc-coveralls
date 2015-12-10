@@ -14,9 +14,11 @@ module SHC.Utils
 import           Control.Monad       (guard)
 import           Data.Function       (on)
 import           Data.List
+import           Data.Version
 #if __GLASGOW_HASKELL__ < 710
 import           Control.Applicative ((<$>), (<*>))
 #endif
+import           Text.ParserCombinators.ReadP
 import           System.FilePath     ((</>))
 import           System.Process      (readProcess)
 
@@ -54,7 +56,17 @@ getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
 
 -- | Verify that the required Stack is present.
 checkStackVersion :: IO Bool
-checkStackVersion = ("0.1.7.0" <=) <$> stack ["--numeric-version"]
+checkStackVersion = do
+    let lowerBound = Version [0,1,7,0] []
+    stackVersion <- stack ["--numeric-version"]
+    return $ verifyVersion stackVersion lowerBound
+
+-- | Check whether a string is a version and if it is
+-- greater than or equal to a specified version.
+verifyVersion :: String -> Version -> Bool
+verifyVersion ver lowerBound =
+        let parses = readP_to_S parseVersion ver
+        in  not (null parses) && (lowerBound <= fst (last parses))
 
 -- | Return the HPC data directory, given the package name.
 getHpcDir :: String -> IO FilePath

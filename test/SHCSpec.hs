@@ -10,6 +10,7 @@ import           Control.Exception        (evaluate)
 import           Data.Aeson
 import qualified Data.Map.Strict          as M
 import           Data.Time.Clock          (getCurrentTime)
+import           Data.Version
 import           System.IO.Unsafe         (unsafePerformIO)
 import           Test.Hspec
 import           Test.Hspec.Contrib.HUnit
@@ -89,6 +90,11 @@ spec = do
         it "toLix" $
             toLix 4 covEntries `shouldBe` [Partial, Full, Irrelevant, None]
     describe "SHC.Utils" $ do
+        it "verifyVersion" $
+            let ver = Version [0,1,7,0] []
+            in  (not (verifyVersion "0.1.6.0" ver) &&
+                 verifyVersion "0.1.7.0" ver &&
+                 verifyVersion "1.100.4.56" ver) `shouldBe` True
         it "fst3" $ fst3 (1, 2, 3) `shouldBe` 1
         it "snd3" $ snd3 (1, 2, 3) `shouldBe` 2
         it "trd3" $ trd3 (1, 2, 3) `shouldBe` 3
