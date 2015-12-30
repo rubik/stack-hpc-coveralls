@@ -46,7 +46,7 @@ getGitInfo = GitInfo <$> headRef <*> branchName <*> getRemotes
           branchName = git ["rev-parse", "--abbrev-ref", "HEAD"]
 
 getRemotes :: IO [Remote]
-getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
+getRemotes = nubBy ((==) `on` name) . parseRemotes <$> git ["remote", "-v"]
     where parseRemotes :: String -> [Remote]
           parseRemotes input = do
             line <- lines input
