@@ -23,12 +23,13 @@ import qualified Data.ByteString.Lazy.Char8 as LBS
 import           Data.Digest.Pure.MD5
 import           Data.Function
 import           Data.List
+import           Data.Maybe                 (fromMaybe)
 import qualified Data.Map.Strict            as M
 import           SHC.Lix
 import           SHC.Types
 import           SHC.Utils
 import           System.Exit                (exitFailure)
-import           System.FilePath            ((</>))
+import           System.FilePath            ((</>), normalise)
 import           Trace.Hpc.Mix
 import           Trace.Hpc.Tix
 import           Trace.Hpc.Util
@@ -85,12 +86,17 @@ readCoverageData conf suite = do
                    exitFailure
         Just (Tix tixs) -> do
             mixs <- mapM (readMix' conf) tixs
-            let files = map filePath mixs
+            let files = zipWith filePath tixs mixs
             sources <- mapM readFile files
             let coverageData = zip4 files sources mixs (map tixModuleTixs tixs)
             let filteredCoverageData = filter sourceDirFilter coverageData
             return $ M.fromList $ map toFirstAndRest filteredCoverageData
-            where filePath (Mix fp _ _ _ _) = fp
+            where filePath (TixModule modName _ _ _) (Mix fp _ _ _ _) =
+                    let pkgKey = takeWhile (/= '/') modName
+                        stackProj =
+                          fromMaybe (error $ "readCoverageData/filePath/stackProj: couldn't find " ++ pkgKey) $
+                          find ((== pkgKey) . stackProjectKey) (stackProjects conf)
+                    in normalise $ maybe id (</>) (stackProjectPath stackProj) fp
                   sourceDirFilter = not . matchAny excludeDirPatterns . fst4
                   excludeDirPatterns = []  -- XXX: for now
 

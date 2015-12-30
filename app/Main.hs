@@ -18,6 +18,7 @@ import           System.Exit           (exitFailure)
 
 import           SHC.Api
 import           SHC.Coverage
+import           SHC.Stack
 import           SHC.Types
 import           SHC.Utils
 
@@ -56,7 +57,8 @@ getConfig args = do
     unless (not $ null suites) $
         putStrLn "Error: provide at least one test-suite name" >> exitFailure
     (sn, jId) <- getServiceAndJobId
-    Config <$> pure suites
+    Config <$> pure pn
+           <*> pure suites
            <*> pure sn
            <*> pure jId
            <*> pure (args `getArg` longOption "repo-token")
@@ -66,6 +68,7 @@ getConfig args = do
            <*> pure (if args `isPresent` longOption "partial-coverage"
                         then PartialLines
                         else FullLines)
+           <*> getStackProjects
 
 main :: IO ()
 main = do
