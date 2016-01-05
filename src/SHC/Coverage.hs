@@ -91,8 +91,7 @@ readCoverageData conf suite = do
                         stackProj =
                           fromMaybe (error $ "readCoverageData/filePath/stackProj: couldn't find " ++ pkgKey) $
                           find ((== pkgKey) . stackProjectKey) (stackProjects conf)
-                    dir <- SHC.Types.mixDir conf (stackProjectPath stackProj)
-                    mix@(Mix origFp _ _ _ _) <- readMix [dir] (Right tixModule)
+                    mix@(Mix origFp _ _ _ _) <- readMix [fromMaybe (stackProjectMixDir stackProj) (mixDir conf)] (Right tixModule)
                     let fp = normalise $ maybe id (</>) (stackProjectPath stackProj) origFp
                     source <- BS.readFile fp
                     return (fp, source, mix, tixs)

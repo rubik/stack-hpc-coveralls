@@ -40,7 +40,7 @@ data Config = Config
     , repoToken     :: Maybe String
     , gitInfo       :: GitInfo
     , hpcDir        :: FilePath
-    , mixDir        :: (Maybe FilePath -> IO FilePath)
+    , mixDir        :: Maybe FilePath
     , conversion    :: ConversionType
     , stackProjects :: [StackProject]
     }
@@ -107,11 +107,13 @@ instance FromJSON StackQuery where
 -- | Information we've collected about a stack project.
 data StackProject =
   StackProject
-  { stackProjectName :: String
+  { stackProjectName   :: String
     -- ^ The name of this project.
-  , stackProjectPath :: Maybe FilePath
+  , stackProjectPath   :: Maybe FilePath
     -- ^ Path of the project relative to current path.  @Nothing@ iff
     -- the project's path is the current path.
-  , stackProjectKey  :: String
+  , stackProjectKey    :: String
     -- ^ Key that @ghc-pkg@ uses for this project.
+  , stackProjectMixDir :: FilePath
+    -- ^ The project's mix dir (cf. 'getMixDir').
   } deriving (Show)

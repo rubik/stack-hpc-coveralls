@@ -40,13 +40,11 @@ checkStackVersion = do
 getHpcDir :: String -> IO FilePath
 getHpcDir package = (</> package) <$> stack ["path", "--local-hpc-root"]
 
--- | Return the HPC mix directory, where module data is stored, given
--- the project path (cf. 'stackProjectPath').
-getMixDir :: Maybe FilePath -> IO FilePath
-getMixDir mpath = addPrefix . addSuffix <$> stack ["path", "--dist-dir"]
-  where
-    addPrefix = maybe id (</>) mpath
-    addSuffix = (</> "hpc")
+-- | Return the HPC mix directory, where module data is stored.  This
+-- path needs to be prefixed with the project's path
+-- (cf. 'stackProjectPath').
+getBaseMixDir :: IO FilePath
+getBaseMixDir = (</> "hpc") <$> stack ["path", "--dist-dir"]
 
 -- | Get relevant information from @stack query@.  Used to find
 -- package filepaths.
@@ -62,12 +60,15 @@ getProjectKey pkgName = stack ["exec", "--", "ghc-pkg", "field", pkgName, "key",
 getStackProjects :: IO [StackProject]
 getStackProjects = do
   sq <- getStackQuery
+  baseMixDir <- getBaseMixDir
   forM (stackQueryLocals sq) $ \(pkgName, filepath) -> do
     relfp <- makeRelativeToCurrentDirectory filepath
-    key   <- getProjectKey pkgName
+    let mpath = guard (not $ relfp `equalFilePath` ".") >> Just relfp
+    key <- getProjectKey pkgName
     return
       StackProject
-        { stackProjectName = pkgName
-        , stackProjectPath = guard (not $ relfp `equalFilePath` ".") >> Just relfp
-        , stackProjectKey  = key
+        { stackProjectName   = pkgName
+        , stackProjectPath   = mpath
+        , stackProjectKey    = key
+        , stackProjectMixDir = maybe id (</>) mpath baseMixDir
         }

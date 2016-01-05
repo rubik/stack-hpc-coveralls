@@ -64,7 +64,7 @@ getConfig args = do
            <*> pure (args `getArg` longOption "repo-token")
            <*> getGitInfo
            <*> defaultOr args (longOption "hpc-dir") (getHpcDir pn)
-           <*> pure (maybe getMixDir (const . return) $ args `getArg` longOption "mix-dir")
+           <*> pure (args `getArg` longOption "mix-dir")
            <*> pure (if args `isPresent` longOption "partial-coverage"
                         then PartialLines
                         else FullLines)
