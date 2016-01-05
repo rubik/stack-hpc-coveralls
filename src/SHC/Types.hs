@@ -43,6 +43,7 @@ data Config = Config
     , mixDir        :: Maybe FilePath
     , conversion    :: ConversionType
     , stackProjects :: [StackProject]
+    , fetchCoverage :: Bool
     }
 
 data GitInfo = GitInfo

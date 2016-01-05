@@ -8,6 +8,7 @@ Options:
     --repo-token=<token>  Coveralls repo token
     --partial-coverage    allow partial line coverage
     --dont-send           display Coveralls JSON instead of sending it
+    --fetch-coverage      fetch and display Coveralls's overall coverage
 
 Multiple packages:
      Use "combined" and "all" as package-name and suite-name resp. in

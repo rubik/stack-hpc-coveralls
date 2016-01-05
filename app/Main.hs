@@ -3,7 +3,7 @@
 module Main
     where
 
-import           Control.Monad         (unless)
+import           Control.Monad         (unless, when)
 import           Data.Aeson            (encode)
 import qualified Data.ByteString.Lazy  as BSL
 import           Data.List             (find)
@@ -69,6 +69,7 @@ getConfig args = do
                         then PartialLines
                         else FullLines)
            <*> getStackProjects
+           <*> pure (args `isPresent` longOption "fetch-coverage")
 
 main :: IO ()
 main = do
@@ -87,12 +88,13 @@ main = do
              PostSuccess u -> do
                  let apiUrl = u ++ ".json"
                  putStrLn $ "Job URL: " ++ apiUrl
-                 -- wait 5 seconds until the page is available
-                 threadDelay $ 5 * 1000 * 1000
-                 coverageResult <- readCoverageResult apiUrl
-                 case coverageResult of
-                     Just totalCov -> putStrLn $ "Coverage: " ++ show totalCov
-                     Nothing       -> putStrLn "Failed to read total coverage"
+                 when (fetchCoverage conf) $ do
+                     -- wait 5 seconds until the page is available
+                     threadDelay $ 5 * 1000 * 1000
+                     coverageResult <- readCoverageResult apiUrl
+                     case coverageResult of
+                         Just totalCov -> putStrLn $ "Coverage: " ++ show totalCov
+                         Nothing       -> putStrLn "Failed to read total coverage"
              PostFailure msg -> do
                  putStrLn $ "Error: " ++ msg
                  exitFailure
