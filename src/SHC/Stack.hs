@@ -40,9 +40,13 @@ checkStackVersion = do
 getHpcDir :: String -> IO FilePath
 getHpcDir package = (</> package) <$> stack ["path", "--local-hpc-root"]
 
--- | Return the HPC mix directory, where module data is stored.
-getMixDir :: IO FilePath
-getMixDir = (</> "hpc") <$> stack ["path", "--dist-dir"]
+-- | Return the HPC mix directory, where module data is stored, given
+-- the project path (cf. 'stackProjectPath').
+getMixDir :: Maybe FilePath -> IO FilePath
+getMixDir mpath = addPrefix . addSuffix <$> stack ["path", "--dist-dir"]
+  where
+    addPrefix = maybe id (</>) mpath
+    addSuffix = (</> "hpc")
 
 -- | Get relevant information from @stack query@.  Used to find
 -- package filepaths.

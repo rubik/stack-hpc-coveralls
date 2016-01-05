@@ -40,7 +40,7 @@ data Config = Config
     , repoToken     :: Maybe String
     , gitInfo       :: GitInfo
     , hpcDir        :: FilePath
-    , mixDir        :: FilePath
+    , mixDir        :: (Maybe FilePath -> IO FilePath)
     , conversion    :: ConversionType
     , stackProjects :: [StackProject]
     }
