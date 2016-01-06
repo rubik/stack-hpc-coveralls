@@ -3,7 +3,7 @@
 module Main
     where
 
-import           Control.Monad         (unless)
+import           Control.Monad         (unless, when)
 import           Data.Aeson            (encode)
 import qualified Data.ByteString.Lazy  as BSL
 import           Data.List             (find)
@@ -18,6 +18,7 @@ import           System.Exit           (exitFailure)
 
 import           SHC.Api
 import           SHC.Coverage
+import           SHC.Stack
 import           SHC.Types
 import           SHC.Utils
 
@@ -56,16 +57,19 @@ getConfig args = do
     unless (not $ null suites) $
         putStrLn "Error: provide at least one test-suite name" >> exitFailure
     (sn, jId) <- getServiceAndJobId
-    Config <$> pure suites
+    Config <$> pure pn
+           <*> pure suites
            <*> pure sn
            <*> pure jId
            <*> pure (args `getArg` longOption "repo-token")
            <*> getGitInfo
            <*> defaultOr args (longOption "hpc-dir") (getHpcDir pn)
-           <*> defaultOr args (longOption "hpc-dir") getMixDir
+           <*> pure (args `getArg` longOption "mix-dir")
            <*> pure (if args `isPresent` longOption "partial-coverage"
                         then PartialLines
                         else FullLines)
+           <*> getStackProjects
+           <*> pure (args `isPresent` longOption "fetch-coverage")
 
 main :: IO ()
 main = do
@@ -84,12 +88,13 @@ main = do
              PostSuccess u -> do
                  let apiUrl = u ++ ".json"
                  putStrLn $ "Job URL: " ++ apiUrl
-                 -- wait 5 seconds until the page is available
-                 threadDelay $ 5 * 1000 * 1000
-                 coverageResult <- readCoverageResult apiUrl
-                 case coverageResult of
-                     Just totalCov -> putStrLn $ "Coverage: " ++ show totalCov
-                     Nothing       -> putStrLn "Failed to read total coverage"
+                 when (fetchCoverage conf) $ do
+                     -- wait 5 seconds until the page is available
+                     threadDelay $ 5 * 1000 * 1000
+                     coverageResult <- readCoverageResult apiUrl
+                     case coverageResult of
+                         Just totalCov -> putStrLn $ "Coverage: " ++ show totalCov
+                         Nothing       -> putStrLn "Failed to read total coverage"
              PostFailure msg -> do
                  putStrLn $ "Error: " ++ msg
                  exitFailure

@@ -19,7 +19,6 @@ import           Data.Version
 import           Control.Applicative ((<$>), (<*>))
 #endif
 import           Text.ParserCombinators.ReadP
-import           System.FilePath     ((</>))
 import           System.Process      (readProcess)
 
 import           SHC.Types
@@ -30,9 +29,6 @@ readP cmd args = init <$> readProcess cmd args []  -- strip trailing \n
 
 git :: [String] -> IO String
 git = readP "git"
-
-stack :: [String] -> IO String
-stack = readP "stack"
 
 -- | Get information about the Git repo in the current directory.
 getGitInfo :: IO GitInfo
@@ -46,7 +42,7 @@ getGitInfo = GitInfo <$> headRef <*> branchName <*> getRemotes
           branchName = git ["rev-parse", "--abbrev-ref", "HEAD"]
 
 getRemotes :: IO [Remote]
-getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
+getRemotes = nubBy ((==) `on` name) . parseRemotes <$> git ["remote", "-v"]
     where parseRemotes :: String -> [Remote]
           parseRemotes input = do
             line <- lines input
@@ -54,27 +50,12 @@ getRemotes = nubBy ((==) `on` name) <$> parseRemotes <$> git ["remote", "-v"]
             guard $ length fields >= 2
             return $ Remote (head fields) (fields !! 1)
 
--- | Verify that the required Stack is present.
-checkStackVersion :: IO Bool
-checkStackVersion = do
-    let lowerBound = Version [0,1,7,0] []
-    stackVersion <- stack ["--numeric-version"]
-    return $ verifyVersion stackVersion lowerBound
-
 -- | Check whether a string is a version and if it is
 -- greater than or equal to a specified version.
 verifyVersion :: String -> Version -> Bool
 verifyVersion ver lowerBound =
         let parses = readP_to_S parseVersion ver
         in  not (null parses) && (lowerBound <= fst (last parses))
-
--- | Return the HPC data directory, given the package name.
-getHpcDir :: String -> IO FilePath
-getHpcDir package = (</> package) <$> stack ["path", "--local-hpc-root"]
-
--- | Return the HPC mix directory, where module data is stored.
-getMixDir :: IO FilePath
-getMixDir = (</> "hpc") <$> stack ["path", "--dist-dir"]
 
 fst3 :: (a, b, c) -> a
 fst3 (x, _, _) = x

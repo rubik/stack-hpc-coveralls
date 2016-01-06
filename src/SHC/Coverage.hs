@@ -19,23 +19,25 @@ import           Control.Applicative
 #endif
 import           Data.Aeson
 import           Data.Aeson.Types           ()
+import qualified Data.ByteString.Char8      as BS
 import qualified Data.ByteString.Lazy.Char8 as LBS
 import           Data.Digest.Pure.MD5
 import           Data.Function
 import           Data.List
+import           Data.Maybe                 (fromMaybe)
 import qualified Data.Map.Strict            as M
 import           SHC.Lix
 import           SHC.Types
 import           SHC.Utils
 import           System.Exit                (exitFailure)
-import           System.FilePath            ((</>))
+import           System.FilePath            ((</>), normalise)
 import           Trace.Hpc.Mix
 import           Trace.Hpc.Tix
 import           Trace.Hpc.Util
 
-type ModuleCoverageData = ( String     -- file source code
-                          , Mix        -- module index data
-                          , [Integer]  -- tixs recorded by HPC
+type ModuleCoverageData = ( BS.ByteString -- file source code
+                          , Mix           -- module index data
+                          , [Integer]     -- tixs recorded by HPC
                           )
 
 type TestSuiteCoverageData = M.Map FilePath ModuleCoverageData
@@ -61,9 +63,6 @@ looseConverter = map $ \case
     None       -> Number 0
     Irrelevant -> Null
 
-readMix' :: Config -> TixModule -> IO Mix
-readMix' conf tix = readMix [SHC.Types.mixDir conf] (Right tix)
-
 -- | Generate Coveralls JSON formatted code coverage from HPC coverage data
 generateCoverallsFromTix :: Config -> IO Value
 generateCoverallsFromTix conf = do
@@ -84,13 +83,18 @@ readCoverageData conf suite = do
         Nothing -> putStrLn ("Couldn't find the file " ++ tixPath) >>
                    exitFailure
         Just (Tix tixs) -> do
-            mixs <- mapM (readMix' conf) tixs
-            let files = map filePath mixs
-            sources <- mapM readFile files
-            let coverageData = zip4 files sources mixs (map tixModuleTixs tixs)
+            coverageData <- mapM getCoverageData tixs
             let filteredCoverageData = filter sourceDirFilter coverageData
             return $ M.fromList $ map toFirstAndRest filteredCoverageData
-            where filePath (Mix fp _ _ _ _) = fp
+            where getCoverageData tixModule@(TixModule modName _ _ tixs) = do
+                    let pkgKey = takeWhile (/= '/') modName
+                        stackProj =
+                          fromMaybe (error $ "readCoverageData/filePath/stackProj: couldn't find " ++ pkgKey) $
+                          find ((== pkgKey) . stackProjectKey) (stackProjects conf)
+                    mix@(Mix origFp _ _ _ _) <- readMix [fromMaybe (stackProjectMixDir stackProj) (mixDir conf)] (Right tixModule)
+                    let fp = normalise $ maybe id (</>) (stackProjectPath stackProj) origFp
+                    source <- BS.readFile fp
+                    return (fp, source, mix, tixs)
                   sourceDirFilter = not . matchAny excludeDirPatterns . fst4
                   excludeDirPatterns = []  -- XXX: for now
 
@@ -110,15 +114,16 @@ toCoverallsJson conf converter testSuiteCoverageData =
 coverageToJson :: LixConverter -> FilePath -> ModuleCoverageData -> Value
 coverageToJson converter path (source, mix, tixs) =
     object [ "name"          .= path
-           , "source_digest" .= (show . md5 . LBS.pack) source
+           , "source_digest" .= (show . md5 . LBS.fromStrict) source
            , "coverage"      .= coverage
            ]
     where coverage = toSimpleCoverage converter lineCount mixEntriesTixs
-          lineCount = length $ lines source
+          sourceLines = BS.lines source
+          lineCount = length sourceLines
           mixEntriesTixs = groupMixEntryTixs mixEntryTixs
           mixEntryTixs = zip3 mixEntries tixs (map getExprSource' mixEntries)
           Mix _ _ _ _ mixEntries = mix
-          getExprSource' = getExprSource $ lines source
+          getExprSource' = getExprSource $ map BS.unpack sourceLines
 
 mergeCoverageData :: [TestSuiteCoverageData] -> TestSuiteCoverageData
 mergeCoverageData = foldr1 $ M.unionWith mergeModule
