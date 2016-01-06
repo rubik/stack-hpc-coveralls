@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE CPP, OverloadedStrings #-}
 
 module SHC.Types
     where
@@ -8,6 +8,10 @@ import           Data.Aeson
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text           as T
 import           Trace.Hpc.Mix
+
+#if __GLASGOW_HASKELL__ < 710
+import Control.Applicative ((<$>))
+#endif
 
 
 data ConversionType = FullLines
