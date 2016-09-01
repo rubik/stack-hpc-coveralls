@@ -16,8 +16,9 @@ import Data.Version
 import Control.Applicative ((<$>), (<*>))
 #endif
 import Control.Monad (forM, guard)
+import Data.List (elem)
 import System.Directory (makeRelativeToCurrentDirectory)
-import System.FilePath ((</>), equalFilePath)
+import System.FilePath ((</>), equalFilePath, splitPath)
 
 import qualified Data.ByteString.Char8 as BS8
 import qualified Data.Yaml as Y
@@ -64,7 +65,9 @@ getStackProjects = do
   forM (stackQueryLocals sq) $ \(pkgName, filepath) -> do
     relfp <- makeRelativeToCurrentDirectory filepath
     let mpath = guard (not $ relfp `equalFilePath` ".") >> Just relfp
-    key <- getProjectKey pkgName
+    key <- if ".stack-work/" `elem` splitPath relfp
+             then return pkgName
+             else getProjectKey pkgName
     return
       StackProject
         { stackProjectName   = pkgName
