@@ -45,7 +45,7 @@ sendData conf url json = do
        else return . PostFailure $ formatResponseError r
     where fileName    = serviceName conf ++ "-" ++ jobId conf ++ ".json"
           requestBody = RequestBodyLBS $ encode json
-          httpOptions = defaults & checkResponse .~ Just noCheck
+          httpOptions = defaults & checkResponse ?~ noCheck
           noCheck _ _ = return ()
 
 readResponse :: Response LBS.ByteString -> PostResult
