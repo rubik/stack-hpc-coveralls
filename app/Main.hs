@@ -39,7 +39,8 @@ getServiceAndJobId = do
            ("CIRCLECI",    ("circleci",  "CIRCLE_BUILD_NUM")),
            ("SEMAPHORE",   ("semaphore", "REVISION")),
            ("JENKINS_URL", ("jenkins",   "BUILD_ID")),
-           ("CI_NAME",     ("codeship",  "CI_BUILD_NUMBER"))]
+           ("CI_NAME",     ("codeship",  "CI_BUILD_NUMBER")),
+           ("BUILDKITE",   ("buildkite", "BUILDKITE_BUILD_NUMBER"))]
 
 patterns :: Docopt
 patterns = [docoptFile|USAGE.txt|]
