@@ -35,12 +35,13 @@ getServiceAndJobId = do
             return (ciName, jId)
         _ -> error "Unsupported CI service."
     where ciEnvVars = [
-           ("TRAVIS",      ("travis-ci", "TRAVIS_JOB_ID")),
-           ("CIRCLECI",    ("circleci",  "CIRCLE_BUILD_NUM")),
-           ("SEMAPHORE",   ("semaphore", "REVISION")),
-           ("JENKINS_URL", ("jenkins",   "BUILD_ID")),
-           ("CI_NAME",     ("codeship",  "CI_BUILD_NUMBER")),
-           ("BUILDKITE",   ("buildkite", "BUILDKITE_BUILD_NUMBER"))]
+           ("GITHUB_ACTIONS", ("github-actions", "GITHUB_RUN_NUMBER")),
+           ("TRAVIS",         ("travis-ci",      "TRAVIS_JOB_ID")),
+           ("CIRCLECI",       ("circleci",       "CIRCLE_BUILD_NUM")),
+           ("SEMAPHORE",      ("semaphore",      "REVISION")),
+           ("JENKINS_URL",    ("jenkins",        "BUILD_ID")),
+           ("CI_NAME",        ("codeship",       "CI_BUILD_NUMBER")),
+           ("BUILDKITE",      ("buildkite",      "BUILDKITE_BUILD_NUMBER"))]
 
 patterns :: Docopt
 patterns = [docoptFile|USAGE.txt|]
