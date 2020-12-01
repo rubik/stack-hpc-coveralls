@@ -46,6 +46,9 @@ executable shc
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -Wall
+                       -fPIC
+                       -optl-static
+                       -optl-pthread
   build-depends:       base       >=4.7 && <5
                      , aeson      >=0.8
                      , bytestring >=0.10
