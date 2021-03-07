@@ -1,5 +1,5 @@
 name:                stack-hpc-coveralls
-version:             0.0.4.0
+version:             0.0.6.0
 synopsis:            Initial project template from stack
 description:         Please see README.md
 homepage:            http://github.com/rubik/stack-hpc-coveralls
@@ -46,6 +46,9 @@ executable shc
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -Wall
+                       -fPIC
+                       -optl-static
+                       -optl-pthread
   build-depends:       base       >=4.7 && <5
                      , aeson      >=0.8
                      , bytestring >=0.10

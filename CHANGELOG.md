@@ -2,6 +2,14 @@
 
 This package uses [Semantic Versioning][1].
 
+## v0.0.6.0
+
+- Addition of Github Actions to supported list of CI
+
+## v0.0.5.0
+
+- Fixed support for stack-2
+
 ## v0.0.3.0
 
 - Fix Stack version checking (version greater than 0.1.9): #8.
