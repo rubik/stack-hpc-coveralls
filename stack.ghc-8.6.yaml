@@ -1,0 +1,5 @@
+resolver: lts-14.27
+packages:
+- '.'
+extra-deps:
+- docopt-0.7.0.5@sha256:0ff280d90aa667350f743623708107bdef427a49b64b1bdf3df15905d8cbe345,3540

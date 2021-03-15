@@ -26,7 +26,7 @@ import           Control.Applicative                   ((<$>))
 #endif
 import           Control.Lens
 import           Network.HTTP.Client                   (RequestBody (RequestBodyLBS))
-import           Network.HTTP.Client.MultipartFormData (partFileRequestBody)
+import           Network.HTTP.Client.MultipartFormData (PartM, partFileRequestBody)
 import           Network.Wreq
 
 import           SHC.Types                             (Config (..),
@@ -39,7 +39,7 @@ sendData :: Config        -- ^ SHC configuration
          -> Value         -- ^ The JSON object
          -> IO PostResult
 sendData conf url json = do
-    r <- postWith httpOptions url [partFileRequestBody "json_file" fileName requestBody]
+    r <- postWith httpOptions url [partFileRequestBody "json_file" fileName requestBody :: PartM IO]
     if r ^. responseStatus . statusCode == 200
        then return $ readResponse r
        else return . PostFailure $ formatResponseError r

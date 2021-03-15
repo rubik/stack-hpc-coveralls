@@ -16,7 +16,6 @@ import Data.Version
 import Control.Applicative ((<$>), (<*>))
 #endif
 import Control.Monad (forM, guard)
-import Data.List (elem)
 import System.Directory (makeRelativeToCurrentDirectory)
 import System.FilePath ((</>), equalFilePath, splitPath)
 
@@ -50,7 +49,7 @@ getBaseMixDir = (</> "hpc") <$> stack ["path", "--dist-dir"]
 -- | Get relevant information from @stack query@.  Used to find
 -- package filepaths.
 getStackQuery :: IO StackQuery
-getStackQuery = (Y.decodeEither' . BS8.pack <$> stack ["query"]) >>= either err return
+getStackQuery = either err return . Y.decodeEither' . BS8.pack =<< stack ["query"]
   where err = fail . (++) "getStackQuery: Couldn't decode the result of 'stack query' as YAML: " . show
 
 -- | Get the key that GHC uses for the given package.

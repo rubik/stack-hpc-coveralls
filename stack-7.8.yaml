@@ -1,8 +1,0 @@
-flags: {}
-extra-package-dbs: []
-packages:
-- '.'
-extra-deps:
-- docopt-0.7.0.4
-- hspec-contrib-0.3.0
-resolver: lts-2.22
