@@ -1,41 +1,35 @@
-language: haskell
-
-env:
-  - GHCVER=7.8.4 STACK_YAML=stack-7.8.yaml STACK_VERSION=0.1.7.0
-  - GHCVER=7.8.4 STACK_YAML=stack-7.8.yaml STACK_VERSION=0.1.8.0
-  - GHCVER=7.10.2 STACK_YAML=stack.yaml STACK_VERSION=0.1.7.0
-  - GHCVER=7.10.2 STACK_YAML=stack.yaml STACK_VERSION=0.1.8.0
-
-
-#branches:
-#  only:
-#    - master
-
 sudo: false
+
+language: haskell
 
 cache:
   directories:
-    - $HOME/.stack/
+  - $HOME/.stack
+  - $TRAVIS_BUILD_DIR/.stack-work
+  timeout: 360
+
+matrix:
+  include:
+
+  - env: GHC="8.6.5" RESOLVER="lts-14.27" STACK_YAML=stack.ghc-8.6.yaml
+    addons: {apt: {packages: [libgmp-dev]}}
+
+  - env: GHC="8.8.4" RESOLVER="lts-16.31"
+    addons: {apt: {packages: [libgmp-dev]}}
+
+  - env: GHC="8.10.4" RESOLVER="lts-17"
+    addons: {apt: {packages: [libgmp-dev]}}
 
 before_install:
-  - mkdir -p $HOME/.local/bin
-  - export PATH=$HOME/.local/bin:$PATH
-  - export STACK_FULLVERSION=stack-$STACK_VERSION-linux-x86_64
-  - if [ $STACK_VERSION == "0.1.7.0" ]; then
-        curl -L https://github.com/rubik/argon/releases/download/test-stack-1.7/stack-linux-x64.tar.bz2 | tar -xj -C $HOME/.local/bin;
-    else
-        curl -L https://github.com/commercialhaskell/stack/releases/download/v$STACK_VERSION/$STACK_FULLVERSION.tar.gz | tar xz --strip-components 1 -C ~/.local/bin $STACK_FULLVERSION/stack;
-    fi
-
-  - chmod a+x $HOME/.local/bin/stack
+  - travis_retry curl -sSL https://get.haskellstack.org/ | sh -s - -f
   - stack --version
 
 install:
-  - stack setup --no-terminal
+  - stack setup --no-terminal --resolver $RESOLVER
 
 script:
-  - stack test :shc-test --no-terminal --coverage
+  - stack test :shc-test --no-terminal --coverage --resolver $RESOLVER
 
-after_script:
-  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.2.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
-  - ./shc stack-hpc-coveralls shc-test
+# after_script:
+#   - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.2.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
+#   - ./shc stack-hpc-coveralls shc-test

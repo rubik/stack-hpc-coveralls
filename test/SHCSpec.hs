@@ -19,7 +19,6 @@ import           Trace.Hpc.Util
 
 import           SHCHUnits
 
-import           SHC.Api
 import           SHC.Coverage
 import           SHC.Lix
 import           SHC.Types

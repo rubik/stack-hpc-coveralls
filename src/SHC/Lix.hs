@@ -52,5 +52,5 @@ toLix :: Int             -- ^ Source line count
       -> [CoverageEntry] -- ^ Mix entries and associated hit count
       -> Lix             -- ^ Line coverage
 toLix lineCount entries = map toHit $ groupByIndex lineCount sortedLineHits
-    where sortedLineHits = sortBy (comparing fst) lineHits
+    where sortedLineHits = sortOn fst lineHits
           lineHits = map (toLineHit . adjust) entries

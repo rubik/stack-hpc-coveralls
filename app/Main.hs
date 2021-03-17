@@ -56,15 +56,11 @@ getConfig :: Arguments -> IO Config
 getConfig args = do
     pn <- args `getArgOrExit` argument "package-name"
     let suites = args `getAllArgs` argument "suite-name"
-    unless (not $ null suites) $
+    when (null suites) $
         putStrLn "Error: provide at least one test-suite name" >> exitFailure
     (sn, jId) <- getServiceAndJobId
-    Config <$> pure pn
-           <*> pure suites
-           <*> pure sn
-           <*> pure jId
-           <*> pure (args `getArg` longOption "repo-token")
-           <*> getGitInfo
+    Config pn suites sn jId (args `getArg` longOption "repo-token")
+           <$> getGitInfo
            <*> defaultOr args (longOption "hpc-dir") (getHpcDir pn)
            <*> pure (args `getArg` longOption "mix-dir")
            <*> pure (if args `isPresent` longOption "partial-coverage"

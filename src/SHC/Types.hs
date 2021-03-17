@@ -91,7 +91,7 @@ instance ToJSON Remote where
                       ]
 
 -- | Data returned by the @stack query@ command.
-data StackQuery =
+newtype StackQuery =
   StackQuery
   { stackQueryLocals :: [(String, FilePath)]
     -- ^ A list of pairs of @(package-name, filepath)@, where the
