@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 -- |
 -- Module:      SHC.Stack
 -- Copyright:   (c) 2014-2015 Guillaume Nargeot, (c) 2015-2016 Felipe Lessa
@@ -12,9 +11,6 @@ module SHC.Stack
     where
 
 import Data.Version
-#if __GLASGOW_HASKELL__ < 710
-import Control.Applicative ((<$>), (<*>))
-#endif
 import Control.Monad (forM, guard)
 import System.Directory (makeRelativeToCurrentDirectory)
 import System.FilePath ((</>), equalFilePath, splitPath)

@@ -5,12 +5,19 @@ module SHC.Types
 
 import           Control.Monad (forM)
 import           Data.Aeson
-import qualified Data.HashMap.Strict as HM
-import qualified Data.Text           as T
 import           Trace.Hpc.Mix
+import qualified GHC.Exts as IsList (IsList(..))
 
-#if __GLASGOW_HASKELL__ < 710
-import Control.Applicative ((<$>))
+#if MIN_VERSION_aeson(2,0,0)
+import qualified Data.Aeson.Key as Aeson (Key, toString)
+
+keyToString :: Aeson.Key -> String
+keyToString = Aeson.toString
+#else
+import qualified Data.Text as T
+
+keyToString :: T.Text -> String
+keyToString = T.unpack
 #endif
 
 
@@ -104,9 +111,9 @@ instance FromJSON StackQuery where
     where
       parseLocals =
         withObject "StackQuery/locals" $ \o ->
-          forM (HM.toList o) $ \(pkgName, val) -> do
+          forM (IsList.toList o) $ \(pkgName, val) -> do
             filepath <- withObject "StackQuery/locals/package" (.: "path") val
-            return (T.unpack pkgName, filepath)
+            return (keyToString pkgName, filepath)
 
 
 -- | Information we've collected about a stack project.

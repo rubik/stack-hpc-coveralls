@@ -1,0 +1,5 @@
+resolver: lts-9.21
+packages:
+- '..'
+extra-deps:
+- http-client-0.6.4@sha256:a74b417345857d4250bdb6d4ac7fd4a89fd2ad8efab3164c1a2b843398d5c13a,5320

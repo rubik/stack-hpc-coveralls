@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP         #-}
 {-# LANGUAGE QuasiQuotes #-}
 module Main
     where
@@ -8,9 +7,6 @@ import           Data.Aeson            (encode)
 import qualified Data.ByteString.Lazy  as BSL
 import           Data.List             (find)
 import           Data.Maybe            (isJust)
-#if __GLASGOW_HASKELL__ < 710
-import           Control.Applicative   (pure, (<$>), (<*>))
-#endif
 import           Control.Concurrent    (threadDelay)
 import           System.Console.Docopt
 import           System.Environment    (getArgs, getEnv, getEnvironment)

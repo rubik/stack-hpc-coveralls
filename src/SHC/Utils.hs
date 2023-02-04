@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 -- |
 -- Module:      SHC.Utils
 -- Copyright:   (c) 2014-2015 Guillaume Nargeot
@@ -15,9 +14,6 @@ import           Control.Monad       (guard)
 import           Data.Function       (on)
 import           Data.List
 import           Data.Version
-#if __GLASGOW_HASKELL__ < 710
-import           Control.Applicative ((<$>), (<*>))
-#endif
 import           Text.ParserCombinators.ReadP
 import           System.Process      (readProcess)
 
