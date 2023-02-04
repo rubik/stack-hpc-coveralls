@@ -1,5 +1,7 @@
-resolver: lts-9.21
+resolver: lts-12.26
+system-ghc: true
 packages:
-- '..'
+- '.'
 extra-deps:
 - http-client-0.6.4@sha256:a74b417345857d4250bdb6d4ac7fd4a89fd2ad8efab3164c1a2b843398d5c13a,5320
+- wreq-0.5.3.3@sha256:841539c9d3e7b39c17aee32414d9232a11ab73ed51163fb5e7f68213ea15fe62,5317

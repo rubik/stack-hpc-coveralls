@@ -1,4 +1,5 @@
-resolver: lts-20.04
+resolver: lts-19.33
+system-ghc: true
 packages:
 - '.'
 extra-deps:

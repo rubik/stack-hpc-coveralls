@@ -35,7 +35,7 @@ library
                      , bytestring           >=0.10
                      , utf8-string          >=1
                      , text                 >=1.2
-                     , wreq                 >=0.3
+                     , wreq                 >=0.5.3.2
                      , http-client          >=0.6
                      , lens                 >=4.7
                      , lens-aeson           >=1.0
