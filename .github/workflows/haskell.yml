@@ -99,7 +99,11 @@ jobs:
         set -ex
         stack build --copy-bins --test --no-run-tests
         RELEASE_ARCHIVE=shc-${{ runner.os }}-${{ runner.arch }}.tar.bz2
-        tar cfvj $RELEASE_ARCHIVE -C "$(stack path --local-bin)" shc
+        SUFFIX=""
+        if [ "${{ runner.os }}" = "Windows" ]; then
+          SUFFIX=".exe"
+        fi
+        tar cfvj $RELEASE_ARCHIVE -C "$(stack path --local-bin)" "shc$SUFFIX"
         echo "RELEASE_ARCHIVE=$PWD/$RELEASE_ARCHIVE" >> $GITHUB_OUTPUT
     - name: Release
       uses: softprops/action-gh-release@v1
