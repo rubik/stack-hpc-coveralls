@@ -6,6 +6,8 @@ on:
   push:
     tags:
       - v*
+  schedule:
+    - cron: "0 5 * * 0"
 
 defaults: { run: { shell: bash } }
 
