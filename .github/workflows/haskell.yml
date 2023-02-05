@@ -3,6 +3,8 @@ name: SHC-CI
 on:
   pull_request:
     branches: [ '**' ]
+  push:
+    tags: [ '**' ]
 
 defaults: { run: { shell: bash } }
 
