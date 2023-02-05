@@ -111,7 +111,8 @@ jobs:
         tar cfvj $RELEASE_ARCHIVE -C "$(stack path --local-bin)" "shc$SUFFIX"
         echo "RELEASE_ARCHIVE=$PWD/$RELEASE_ARCHIVE" >> $GITHUB_OUTPUT
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: fnkr/github-action-ghr@v1
       if: matrix.resolver == 'lts-20' && startsWith(github.ref, 'refs/tags/')
-      with:
-        files: ${{ steps.prepare-release.outputs.RELEASE_ARCHIVE }}
+      env:
+        GHR_PATH: ${{ steps.prepare-release.outputs.RELEASE_ARCHIVE }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
