@@ -1,9 +1,1 @@
-resolver: lts-16.31
-packages:
-- '.'
-extra-deps:
-- hlint-3.3
-- ghc-lib-parser-9.0.1.20210207@sha256:1599bb845533c2833b6265fbc7f7f09e665ad4cb07352ee6c6abf6e6a94f6c44,10746
-- ghc-lib-parser-ex-9.0.0.4@sha256:8282b11c3797fc8ba225b245e736cc9a0745d9c48d0f9fea7f9bffb5c9997709,3642
-- github: gelisam/docopt.hs
-  commit: 16dc7bc596c0ea4fa4466b12f474b1abfa72c885
+stack.ghc-9.2.yaml

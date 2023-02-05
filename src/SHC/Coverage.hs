@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP               #-}
 {-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -14,9 +13,6 @@
 module SHC.Coverage
     where
 
-#if __GLASGOW_HASKELL__ < 710
-import           Control.Applicative
-#endif
 import           Data.Aeson
 import           Data.Aeson.Types           ()
 import qualified Data.ByteString.Char8      as BS

@@ -1,0 +1,9 @@
+cradle:
+  stack:
+    components:
+      - path: "./src"
+        component: "stack-hpc-coveralls:lib"
+      - path: "./test"
+        component: "stack-hpc-coveralls:test:shc-test"
+      - path: "./app"
+        component: "stack-hpc-coveralls:exe:shc"

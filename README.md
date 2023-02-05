@@ -5,9 +5,9 @@
 </h1>
 
 <p align="center">
-    <a href="https://travis-ci.org/rubik/stack-hpc-coveralls">
+    <a href="https://github.com/rubik/stack-hpc-coveralls/actions/workflows/haskell.yml">
         <img alt="Tests"
-             src="https://img.shields.io/travis/rubik/stack-hpc-coveralls.svg?style=flat-square">
+             src="https://img.shields.io/github/actions/workflow/status/rubik/stack-hpc-coveralls/haskell.yml?branch=master&style=flat-square">
     </a>
     <a href="https://coveralls.io/github/rubik/stack-hpc-coveralls">
         <img alt="Code coverage"

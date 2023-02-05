@@ -1,0 +1,105 @@
+name: SHC-CI
+
+on:
+  pull_request:
+    branches: [ '**' ]
+
+defaults: { run: { shell: bash } }
+
+jobs:
+  stack:
+    name: Stack
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        resolver: [lts-9, lts-11, lts-12, lts-14, lts-16, lts-18, lts-19, lts-20]
+        include:
+          - resolver: lts-9
+            ghc: '8.0'
+          - resolver: lts-11
+            ghc: '8.2'
+          - resolver: lts-12
+            ghc: '8.4'
+          - resolver: lts-14
+            ghc: '8.6'
+          - resolver: lts-16
+            ghc: '8.8'
+          - resolver: lts-18
+            ghc: '8.10'
+          - resolver: lts-19
+            ghc: '9.0'
+          - resolver: lts-20
+            ghc: '9.2'
+
+    env:
+      STACK_YAML: 'stack.ghc-${{ matrix.ghc }}.yaml'
+      cache-version: v1 # bump up this version to invalidate currently stored cache
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: haskell/actions/setup@v2
+      id: setup-haskell-cabal
+      name: Setup Haskell
+      with:
+        ghc-version: ${{ matrix.ghc }}
+        enable-stack: true
+        stack-version: 'latest'
+
+    - name: Cache
+      id: cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ${{ steps.setup-haskell-cabal.outputs.stack-root }}
+          .stack-work
+        key: ${{ runner.os }}-${{ matrix.resolver }}-${{ env.cache-version }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.resolver }}-${{ env.cache-version }}
+    - name: Windows Cache
+      id: cache-windows
+      uses: actions/cache@v3
+      if: matrix.os == 'windows-latest'
+      with:
+        path: |
+          C:\\Users\\RUNNER~1\\AppData\\Local\\Programs\\stack
+        key: ${{ runner.os }}-${{ matrix.resolver }}-programs-${{ env.cache-version }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.resolver }}-programs-${{ env.cache-version }}
+    - name: Build
+      env:
+        COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+      run: |
+        set -ex
+        if [ -n "${COVERALLS_TOKEN}" ]; then
+          stack build --coverage --test --no-run-tests --haddock --no-haddock-deps
+        else
+          stack build --test --no-run-tests --haddock --no-haddock-deps
+        fi
+    - name: Test
+      env:
+        COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+      run: |
+        set -ex
+        if [ -n "${COVERALLS_TOKEN}" ]; then
+          stack build --test --coverage
+          stack hpc report --all
+          stack exec -- shc --repo-token="$COVERALLS_TOKEN" --fetch-coverage combined custom
+        else
+          stack build --test
+        fi
+    - name: Prepare Release
+      id: prepare-release
+      if: matrix.resolver == 'lts-20' && startsWith(github.ref, 'refs/tags/')
+      run: |
+        set -ex
+        stack build --copy-bins --test --no-run-tests
+        RELEASE_ARCHIVE=shc-${{ runner.os }}-${{ runner.arch }}.tar.bz2
+        tar cfvj $RELEASE_ARCHIVE -C "$(stack path --local-bin)" shc
+        echo "RELEASE_ARCHIVE=$PWD/$RELEASE_ARCHIVE" >> $GITHUB_OUTPUT
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: matrix.resolver == 'lts-20' && startsWith(github.ref, 'refs/tags/')
+      with:
+        files: ${{ steps.prepare-release.outputs.RELEASE_ARCHIVE }}

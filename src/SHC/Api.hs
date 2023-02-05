@@ -1,5 +1,5 @@
-{-# LANGUAGE CPP               #-}
 {-# LANGUAGE OverloadedStrings #-}
+
 
 -- |
 -- Module:      SHC.Lix
@@ -15,15 +15,11 @@ module SHC.Api (sendData, readCoverageResult)
     where
 
 import           Codec.Binary.UTF8.String              (decode)
-import           Control.Exception                     (catch)
 import           Data.Aeson                            (Value, encode)
 import           Data.Aeson.Lens                       (key, _Double, _String)
 import qualified Data.ByteString                       as BS
 import qualified Data.ByteString.Lazy                  as LBS
 import qualified Data.Text                             as T
-#if __GLASGOW_HASKELL__ < 710
-import           Control.Applicative                   ((<$>))
-#endif
 import           Control.Lens
 import           Network.HTTP.Client                   (RequestBody (RequestBodyLBS))
 import           Network.HTTP.Client.MultipartFormData (PartM, partFileRequestBody)

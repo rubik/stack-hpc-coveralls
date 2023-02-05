@@ -2,6 +2,10 @@
 
 This package uses [Semantic Versioning][1].
 
+## v0.0.7.0
+
+- Compatibility with newer ghc versions
+
 ## v0.0.6.0
 
 - Addition of Github Actions to supported list of CI
