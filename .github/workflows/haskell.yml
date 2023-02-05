@@ -35,6 +35,11 @@ jobs:
             ghc: '9.0'
           - resolver: lts-20
             ghc: '9.2'
+        exclude:
+          # ghc-pkg concurrency issue:
+          # https://github.com/commercialhaskell/stack/issues/2617
+          - resolver: lts-9
+            os: windows-latest
 
     env:
       STACK_YAML: 'stack.ghc-${{ matrix.ghc }}.yaml'
